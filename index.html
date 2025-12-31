@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playbook 2026 - Fitness Tracker</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --danger: #dc2626;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            color: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        header .subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(135deg, var(--danger), #b91c1c);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+
+        .alert-banner.show {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .alert-banner h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .alert-banner p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Progress Section */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-box .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-box .label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        /* Today's Training */
+        .training-type {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .training-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .training-badge.day-a {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .training-badge.day-b {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .training-badge.cheat {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .workout-details {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .workout-details h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .workout-details ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .workout-details li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .workout-details li:last-child {
+            border-bottom: none;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .form-group input[type="number"],
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-item label {
+            display: block;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item input:checked + label {
+            background: rgba(22, 163, 74, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #15803d);
+            color: white;
+        }
+
+        /* History */
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 15px;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .history-data {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-tag {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .history-tag.success {
+            background: rgba(22, 163, 74, 0.2);
+            color: var(--success);
+        }
+
+        .history-tag.warning {
+            background: rgba(234, 88, 12, 0.2);
+            color: var(--warning);
+        }
+
+        /* Streak */
+        .streak-display {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .streak-number {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #f59e0b, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .streak-label {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        /* Weekly Average */
+        .weekly-avg {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+
+        .weekly-item {
+            text-align: center;
+        }
+
+        .weekly-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .weekly-item .label {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .trend-up { color: var(--danger); }
+        .trend-down { color: var(--success); }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Quarter Goals */
+        .quarter-goals {
+            display: grid;
+            gap: 10px;
+        }
+
+        .quarter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .quarter-item.achieved {
+            border-left: 3px solid var(--success);
+        }
+
+        .quarter-item.current {
+            border-left: 3px solid var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .quarter-item.future {
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .checkbox-item {
+                min-width: 100px;
+            }
+        }
+
+        /* Workout Rotation Indicator */
+        .rotation-indicator {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .rotation-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .rotation-dot.active {
+            background: var(--primary);
+        }
+
+        .rotation-dot.b1 { background: #ef4444; }
+        .rotation-dot.b2 { background: #3b82f6; }
+        .rotation-dot.b3 { background: #22c55e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PLAYBOOK 2026</h1>
+            <p class="subtitle">Ziel: 89,9 kg bis 23. Dezember 2026</p>
+        </header>
+
+        <!-- Never Miss Twice Alert -->
+        <div class="alert-banner" id="alertBanner">
+            <h3>⚠️ NEVER MISS TWICE!</h3>
+            <p>Du hast gestern kein Training gemacht. Heute ist NICHT verhandelbar!</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="dashboard">Dashboard</button>
+            <button class="tab" data-tab="entry">Eintragen</button>
+            <button class="tab" data-tab="history">Verlauf</button>
+            <button class="tab" data-tab="workouts">Workouts</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <!-- Progress Card -->
+            <div class="card">
+                <h2>📊 Fortschritt zum Ziel</h2>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span id="currentWeight">-- kg</span>
+                        <span>Ziel: 89,9 kg</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="value" id="weightLost">--</div>
+                        <div class="label">kg verloren</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="weightToGo">--</div>
+                        <div class="label">kg noch</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="daysLeft">--</div>
+                        <div class="label">Tage übrig</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="weeklyAvg">--</div>
+                        <div class="label">Ø 7 Tage</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Streak Card -->
+            <div class="card">
+                <h2>🔥 Training Streak</h2>
+                <div class="streak-display">
+                    <div class="streak-number" id="streakCount">0</div>
+                    <div class="streak-label">Tage in Folge trainiert</div>
+                </div>
+            </div>
+
+            <!-- Today's Training -->
+            <div class="card">
+                <h2>💪 Heute</h2>
+                <div class="training-type">
+                    <span class="training-badge" id="todayBadge">--</span>
+                </div>
+                <div class="workout-details" id="todayWorkout">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Weekly Overview -->
+            <div class="card">
+                <h2>📈 Diese Woche</h2>
+                <div class="weekly-avg">
+                    <div class="weekly-item">
+                        <div class="value" id="avgCalories">--</div>
+                        <div class="label">Ø Kalorien</div>
+                    </div>
+                    <div class="weekly-item">
+                        <div class="value" id="avgProtein">--</div>
+                        <div class="label">Ø Protein</div>
+                    </div>
+                    <div class="weekly-item">
+                        <div class="value" id="trainingDays">-/7</div>
+                        <div class="label">Trainingstage</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quarter Goals -->
+            <div class="card">
+                <h2>🎯 Quartalsziele</h2>
+                <div class="quarter-goals" id="quarterGoals">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Entry Tab -->
+        <div class="tab-content" id="entry">
+            <div class="card">
+                <h2>📝 Tageseintrag</h2>
+                <form id="dailyForm">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="entryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gewicht (kg)</label>
+                        <input type="number" id="entryWeight" step="0.1" min="50" max="200" placeholder="z.B. 103.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Kalorien</label>
+                        <input type="number" id="entryCalories" min="0" max="10000" placeholder="z.B. 2300">
+                    </div>
+                    <div class="form-group">
+                        <label>Protein (g)</label>
+                        <input type="number" id="entryProtein" min="0" max="500" placeholder="z.B. 180">
+                    </div>
+                    <div class="form-group">
+                        <label>Checkboxen</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="trainingDone">
+                                <label for="trainingDone">✅ Training</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ifDone">
+                                <label for="ifDone">⏰ IF 12-20</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cheatDay">
+                                <label for="cheatDay">🍕 Cheat Day</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">💾 Speichern</button>
+                </form>
+            </div>
+
+            <!-- Quick Stats After Entry -->
+            <div class="card">
+                <h2>⚡ Schnell-Check</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="value" id="proteinStatus">--</div>
+                        <div class="label">Protein heute</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="calorieStatus">--</div>
+                        <div class="label">Kalorien heute</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div class="tab-content" id="history">
+            <div class="card">
+                <h2>📅 Letzte 14 Tage</h2>
+                <div class="history-list" id="historyList">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Monthly Stats -->
+            <div class="card">
+                <h2>📊 Monatsübersicht</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="value" id="monthStart">--</div>
+                        <div class="label">Monatsstart</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="monthCurrent">--</div>
+                        <div class="label">Aktuell</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="monthChange">--</div>
+                        <div class="label">Veränderung</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="monthTrainings">--</div>
+                        <div class="label">Trainings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workouts Tab -->
+        <div class="tab-content" id="workouts">
+            <div class="card">
+                <h2 style="color: #3b82f6;">🏃 Tag A: Laufen</h2>
+                <div class="workout-details">
+                    <p><strong>Phase 1 (Jan W1-4):</strong> 15-30 Min locker</p>
+                    <p><strong>Phase 2 (Feb-März):</strong> 30-45 Min, Intervalle</p>
+                    <p><strong>Phase 3 (Apr-Okt):</strong> 40-60 Min Mix</p>
+                    <p><strong>Phase 4 (Nov-Dez):</strong> Wintermodus</p>
+                    <h4 style="margin-top: 15px;">Indoor-Backup:</h4>
+                    <ul>
+                        <li>Boxsack: 20-30 Min Intervalle</li>
+                        <li>HIIT Bodyweight: 20-25 Min</li>
+                        <li>Springseil: 15-20 Min</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="color: #ef4444;">💪 B1: Push (Brust, Schultern, Trizeps)</h2>
+                <div class="workout-details">
+                    <ul>
+                        <li>KH-Bankdrücken (Boden): 4x8-12</li>
+                        <li>KH-Schulterdrücken: 3x10-12</li>
+                        <li>KH-Flys: 3x12-15</li>
+                        <li>Liegestütze: 3x max</li>
+                        <li>KH-Trizepsdrücken: 3x12</li>
+                        <li>Dips: 3x max</li>
+                        <li>Finisher: Boxsack 3x2 Min</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="color: #3b82f6;">💪 B2: Pull (Rücken, Bizeps)</h2>
+                <div class="workout-details">
+                    <ul>
+                        <li>Klimmzüge: 4x max</li>
+                        <li>KH-Rudern einarmig: 4x10-12</li>
+                        <li>KH-Kreuzheben: 3x10-12</li>
+                        <li>Face Pulls: 3x15</li>
+                        <li>KH-Curls: 3x12</li>
+                        <li>Hammer Curls: 3x12</li>
+                        <li>Shrugs: 3x15</li>
+                        <li>Finisher: Plank 3x45-60s</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="color: #22c55e;">💪 B3: Legs + Core</h2>
+                <div class="workout-details">
+                    <ul>
+                        <li>Goblet Squats: 4x12-15</li>
+                        <li>KH-Ausfallschritte: 3x10/Bein</li>
+                        <li>Rumänisches Kreuzheben: 4x10-12</li>
+                        <li>Bulgarian Split Squats: 3x10/Bein</li>
+                        <li>Wadenheben: 3x20</li>
+                        <li>Russian Twists: 3x20</li>
+                        <li>Dead Bugs: 3x12</li>
+                        <li>Finisher: Boxsack Kicks 3x2 Min</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🍽️ Ernährung Reminder</h2>
+                <div class="workout-details">
+                    <p><strong>IF-Fenster:</strong> 12:00 - 20:00 Uhr</p>
+                    <p><strong>Kalorien:</strong> 2.100-2.400 kcal</p>
+                    <p><strong>Protein:</strong> 180g minimum</p>
+                    <p><strong>Cheat Day:</strong> Nur Samstag!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ DATA STORAGE ============
+        const STORAGE_KEY = 'playbook2026';
+        const START_WEIGHT = 109;
+        const GOAL_WEIGHT = 89.9;
+        const GOAL_DATE = new Date('2026-12-23');
+        const START_DATE = new Date('2026-01-01');
+
+        // Quarter Goals
+        const QUARTER_GOALS = [
+            { label: 'Q1 (31. März)', target: 99.5, date: new Date('2026-03-31') },
+            { label: 'Q2 (30. Juni)', target: 95.5, date: new Date('2026-06-30') },
+            { label: 'Q3 (30. Sept)', target: 92.5, date: new Date('2026-09-30') },
+            { label: 'Q4 (23. Dez)', target: 89.9, date: new Date('2026-12-23') }
+        ];
+
+        // Workout rotation
+        const WORKOUTS = {
+            A: {
+                name: 'Tag A: Laufen',
+                badge: 'day-a',
+                details: 'Ausdauertraining - Laufen oder Indoor-Alternative'
+            },
+            B1: {
+                name: 'B1: Push',
+                badge: 'day-b',
+                details: 'Brust, Schultern, Trizeps + Boxsack Finisher'
+            },
+            B2: {
+                name: 'B2: Pull',
+                badge: 'day-b',
+                details: 'Rücken, Bizeps + Plank Finisher'
+            },
+            B3: {
+                name: 'B3: Legs + Core',
+                badge: 'day-b',
+                details: 'Beine, Gesäß, Rumpf + Boxsack Kicks'
+            },
+            CHEAT: {
+                name: 'Cheat Day',
+                badge: 'cheat',
+                details: 'Ruhetag - Training optional, Ernährung frei'
+            }
+        };
+
+        // ============ HELPER FUNCTIONS ============
+        function getData() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : { entries: {}, startWeight: START_WEIGHT, bRotation: 0 };
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function parseDate(str) {
+            return new Date(str + 'T00:00:00');
+        }
+
+        function getDayName(date) {
+            return ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][date.getDay()];
+        }
+
+        // ============ WORKOUT CALCULATION ============
+        function getTodayWorkout() {
+            const today = new Date();
+            const dayOfWeek = today.getDay(); // 0 = Sunday
+
+            // Saturday is always Cheat Day
+            if (dayOfWeek === 6) {
+                return 'CHEAT';
+            }
+
+            const data = getData();
+
+            // Count training days since start to determine A/B and B-rotation
+            // Simple approach: alternate A/B, B cycles through B1/B2/B3
+            const entries = Object.keys(data.entries).sort();
+
+            // Count consecutive training days to determine today's type
+            let trainingsCount = entries.filter(d => data.entries[d].training).length;
+
+            // If today is odd training number -> A, even -> B
+            // Simpler: just use the day pattern
+            const isADay = trainingsCount % 2 === 0;
+
+            if (isADay) {
+                return 'A';
+            } else {
+                // Determine which B workout
+                const bRotation = data.bRotation || 0;
+                const bWorkouts = ['B1', 'B2', 'B3'];
+                return bWorkouts[bRotation % 3];
+            }
+        }
+
+        function advanceBRotation() {
+            const data = getData();
+            data.bRotation = ((data.bRotation || 0) + 1) % 3;
+            saveData(data);
+        }
+
+        // ============ STREAK CALCULATION ============
+        function calculateStreak() {
+            const data = getData();
+            const entries = data.entries;
+            const sortedDates = Object.keys(entries).sort().reverse();
+
+            let streak = 0;
+            let checkDate = new Date();
+            checkDate.setHours(0, 0, 0, 0);
+
+            // Check if today was already logged
+            const todayStr = formatDate(checkDate);
+            if (entries[todayStr]?.training) {
+                streak = 1;
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            // Count backwards
+            while (true) {
+                const dateStr = formatDate(checkDate);
+                const entry = entries[dateStr];
+
+                // Skip Saturdays (Cheat Days)
+                if (checkDate.getDay() === 6) {
+                    checkDate.setDate(checkDate.getDate() - 1);
+                    continue;
+                }
+
+                if (entry?.training) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else if (entry) {
+                    // Entry exists but no training = streak broken
+                    break;
+                } else {
+                    // No entry = assume streak continues only if within reasonable range
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        // ============ NEVER MISS TWICE ============
+        function checkNeverMissTwice() {
+            const data = getData();
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            // Skip if yesterday was Saturday (Cheat Day)
+            if (yesterday.getDay() === 6) return false;
+
+            const yesterdayStr = formatDate(yesterday);
+            const entry = data.entries[yesterdayStr];
+
+            // Alert if yesterday had an entry but no training
+            return entry && !entry.training;
+        }
+
+        // ============ STATS CALCULATION ============
+        function getWeeklyAverage() {
+            const data = getData();
+            const entries = data.entries;
+            const today = new Date();
+            const weekAgo = new Date(today);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            let weights = [];
+            let calories = [];
+            let proteins = [];
+            let trainingCount = 0;
+
+            for (let d = new Date(weekAgo); d <= today; d.setDate(d.getDate() + 1)) {
+                const dateStr = formatDate(d);
+                const entry = entries[dateStr];
+                if (entry) {
+                    if (entry.weight) weights.push(entry.weight);
+                    if (entry.calories) calories.push(entry.calories);
+                    if (entry.protein) proteins.push(entry.protein);
+                    if (entry.training) trainingCount++;
+                }
+            }
+
+            return {
+                weight: weights.length ? (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(1) : null,
+                calories: calories.length ? Math.round(calories.reduce((a, b) => a + b, 0) / calories.length) : null,
+                protein: proteins.length ? Math.round(proteins.reduce((a, b) => a + b, 0) / proteins.length) : null,
+                trainingDays: trainingCount
+            };
+        }
+
+        function getLatestWeight() {
+            const data = getData();
+            const entries = data.entries;
+            const sortedDates = Object.keys(entries).sort().reverse();
+
+            for (const date of sortedDates) {
+                if (entries[date].weight) {
+                    return entries[date].weight;
+                }
+            }
+            return null;
+        }
+
+        function getMonthlyStats() {
+            const data = getData();
+            const entries = data.entries;
+            const today = new Date();
+            const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            let firstWeight = null;
+            let lastWeight = null;
+            let trainingCount = 0;
+
+            const sortedDates = Object.keys(entries).sort();
+
+            for (const dateStr of sortedDates) {
+                const date = parseDate(dateStr);
+                if (date >= monthStart && date <= today) {
+                    const entry = entries[dateStr];
+                    if (entry.weight) {
+                        if (!firstWeight) firstWeight = entry.weight;
+                        lastWeight = entry.weight;
+                    }
+                    if (entry.training) trainingCount++;
+                }
+            }
+
+            return {
+                start: firstWeight,
+                current: lastWeight,
+                change: firstWeight && lastWeight ? (lastWeight - firstWeight).toFixed(1) : null,
+                trainings: trainingCount
+            };
+        }
+
+        // ============ UI UPDATE FUNCTIONS ============
+        function updateDashboard() {
+            const data = getData();
+            const latestWeight = getLatestWeight();
+            const weeklyStats = getWeeklyAverage();
+            const streak = calculateStreak();
+            const todayWorkout = getTodayWorkout();
+
+            // Progress
+            if (latestWeight) {
+                document.getElementById('currentWeight').textContent = `${latestWeight} kg`;
+                const lost = (START_WEIGHT - latestWeight).toFixed(1);
+                const toGo = (latestWeight - GOAL_WEIGHT).toFixed(1);
+                const progress = ((START_WEIGHT - latestWeight) / (START_WEIGHT - GOAL_WEIGHT)) * 100;
+
+                document.getElementById('weightLost').textContent = lost;
+                document.getElementById('weightToGo').textContent = toGo;
+                document.getElementById('progressFill').style.width = `${Math.min(100, Math.max(0, progress))}%`;
+            }
+
+            // Days left
+            const today = new Date();
+            const daysLeft = Math.ceil((GOAL_DATE - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysLeft').textContent = daysLeft;
+
+            // Weekly average
+            document.getElementById('weeklyAvg').textContent = weeklyStats.weight ? `${weeklyStats.weight}` : '--';
+            document.getElementById('avgCalories').textContent = weeklyStats.calories || '--';
+            document.getElementById('avgProtein').textContent = weeklyStats.protein ? `${weeklyStats.protein}g` : '--';
+            document.getElementById('trainingDays').textContent = `${weeklyStats.trainingDays}/7`;
+
+            // Streak
+            document.getElementById('streakCount').textContent = streak;
+
+            // Today's workout
+            const workout = WORKOUTS[todayWorkout];
+            const badge = document.getElementById('todayBadge');
+            badge.textContent = workout.name;
+            badge.className = `training-badge ${workout.badge}`;
+            document.getElementById('todayWorkout').innerHTML = `<p>${workout.details}</p>`;
+
+            // Never miss twice alert
+            const alertBanner = document.getElementById('alertBanner');
+            if (checkNeverMissTwice()) {
+                alertBanner.classList.add('show');
+            } else {
+                alertBanner.classList.remove('show');
+            }
+
+            // Quarter goals
+            updateQuarterGoals(latestWeight);
+        }
+
+        function updateQuarterGoals(currentWeight) {
+            const container = document.getElementById('quarterGoals');
+            const today = new Date();
+
+            container.innerHTML = QUARTER_GOALS.map(q => {
+                let status = 'future';
+                let icon = '⏳';
+
+                if (today > q.date) {
+                    status = currentWeight && currentWeight <= q.target ? 'achieved' : 'future';
+                    icon = currentWeight && currentWeight <= q.target ? '✅' : '❌';
+                } else if (today <= q.date && (QUARTER_GOALS.indexOf(q) === 0 || today > QUARTER_GOALS[QUARTER_GOALS.indexOf(q) - 1]?.date)) {
+                    status = 'current';
+                    icon = '🎯';
+                }
+
+                return `
+                    <div class="quarter-item ${status}">
+                        <span>${icon} ${q.label}</span>
+                        <span>${q.target} kg</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateHistory() {
+            const data = getData();
+            const entries = data.entries;
+            const container = document.getElementById('historyList');
+
+            const sortedDates = Object.keys(entries).sort().reverse().slice(0, 14);
+
+            if (sortedDates.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 20px;">Noch keine Einträge</p>';
+                return;
+            }
+
+            container.innerHTML = sortedDates.map(dateStr => {
+                const entry = entries[dateStr];
+                const date = parseDate(dateStr);
+
+                return `
+                    <div class="history-item">
+                        <div class="history-date">
+                            <strong>${getDayName(date)}</strong><br>
+                            ${dateStr.slice(5)}
+                        </div>
+                        <div class="history-data">
+                            ${entry.weight ? `<span class="history-tag">${entry.weight} kg</span>` : ''}
+                            ${entry.training ? '<span class="history-tag success">✅ Training</span>' : '<span class="history-tag warning">❌ Kein Training</span>'}
+                            ${entry.calories ? `<span class="history-tag">${entry.calories} kcal</span>` : ''}
+                            ${entry.protein ? `<span class="history-tag">${entry.protein}g Protein</span>` : ''}
+                            ${entry.if ? '<span class="history-tag success">IF ✓</span>' : ''}
+                            ${entry.cheat ? '<span class="history-tag" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">🍕 Cheat</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Monthly stats
+            const monthly = getMonthlyStats();
+            document.getElementById('monthStart').textContent = monthly.start ? `${monthly.start} kg` : '--';
+            document.getElementById('monthCurrent').textContent = monthly.current ? `${monthly.current} kg` : '--';
+            document.getElementById('monthChange').textContent = monthly.change ? `${monthly.change} kg` : '--';
+            document.getElementById('monthChange').className = `value ${parseFloat(monthly.change) < 0 ? 'trend-down' : 'trend-up'}`;
+            document.getElementById('monthTrainings').textContent = monthly.trainings;
+        }
+
+        // ============ FORM HANDLING ============
+        function initForm() {
+            const dateInput = document.getElementById('entryDate');
+            dateInput.value = formatDate(new Date());
+
+            // Load existing entry for today
+            loadEntryForDate(dateInput.value);
+
+            dateInput.addEventListener('change', (e) => {
+                loadEntryForDate(e.target.value);
+            });
+        }
+
+        function loadEntryForDate(dateStr) {
+            const data = getData();
+            const entry = data.entries[dateStr] || {};
+
+            document.getElementById('entryWeight').value = entry.weight || '';
+            document.getElementById('entryCalories').value = entry.calories || '';
+            document.getElementById('entryProtein').value = entry.protein || '';
+            document.getElementById('trainingDone').checked = entry.training || false;
+            document.getElementById('ifDone').checked = entry.if || false;
+            document.getElementById('cheatDay').checked = entry.cheat || false;
+
+            updateQuickStats(entry);
+        }
+
+        function updateQuickStats(entry) {
+            const proteinEl = document.getElementById('proteinStatus');
+            const calorieEl = document.getElementById('calorieStatus');
+
+            if (entry.protein) {
+                const proteinOk = entry.protein >= 180;
+                proteinEl.textContent = `${entry.protein}g`;
+                proteinEl.style.color = proteinOk ? 'var(--success)' : 'var(--warning)';
+            } else {
+                proteinEl.textContent = '--';
+                proteinEl.style.color = '';
+            }
+
+            if (entry.calories) {
+                const inRange = entry.calories >= 2100 && entry.calories <= 2400;
+                calorieEl.textContent = entry.calories;
+                calorieEl.style.color = inRange ? 'var(--success)' : 'var(--warning)';
+            } else {
+                calorieEl.textContent = '--';
+                calorieEl.style.color = '';
+            }
+        }
+
+        // ============ EVENT LISTENERS ============
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+
+                    if (tab.dataset.tab === 'history') {
+                        updateHistory();
+                    }
+                });
+            });
+
+            // Form submission
+            document.getElementById('dailyForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const dateStr = document.getElementById('entryDate').value;
+                const data = getData();
+
+                const wasTrainingBefore = data.entries[dateStr]?.training;
+                const isTrainingNow = document.getElementById('trainingDone').checked;
+
+                const entry = {
+                    weight: parseFloat(document.getElementById('entryWeight').value) || null,
+                    calories: parseInt(document.getElementById('entryCalories').value) || null,
+                    protein: parseInt(document.getElementById('entryProtein').value) || null,
+                    training: isTrainingNow,
+                    if: document.getElementById('ifDone').checked,
+                    cheat: document.getElementById('cheatDay').checked
+                };
+
+                data.entries[dateStr] = entry;
+
+                // Advance B rotation if this is a new B-day training
+                if (!wasTrainingBefore && isTrainingNow) {
+                    const todayWorkout = getTodayWorkout();
+                    if (todayWorkout.startsWith('B')) {
+                        advanceBRotation();
+                    }
+                }
+
+                saveData(data);
+
+                updateQuickStats(entry);
+                updateDashboard();
+
+                // Visual feedback
+                const btn = e.target.querySelector('button');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Gespeichert!';
+                btn.style.background = 'var(--success)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+
+            // Initialize
+            initForm();
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
