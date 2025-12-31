@@ -471,6 +471,372 @@
         .rotation-dot.b1 { background: #ef4444; }
         .rotation-dot.b2 { background: #3b82f6; }
         .rotation-dot.b3 { background: #22c55e; }
+
+        /* ============ GAMIFICATION STYLES ============ */
+
+        /* XP Bar */
+        .xp-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .level-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .level-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1e293b;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+        }
+
+        .level-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+
+        .level-info span {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .xp-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .xp-text {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        /* Medals Grid */
+        .medals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .medal-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .medal-item.locked {
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .medal-item.unlocked {
+            border-color: #fbbf24;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+        }
+
+        .medal-item.unlocked::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .medal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .medal-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .medal-desc {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        .medal-item.unlocked .medal-date {
+            font-size: 0.65rem;
+            color: #fbbf24;
+            margin-top: 5px;
+        }
+
+        /* Challenges */
+        .challenge-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .challenge-card.active {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .challenge-card.completed {
+            border-color: var(--success);
+            background: rgba(22, 163, 74, 0.1);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .challenge-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .challenge-title .icon {
+            font-size: 1.3rem;
+        }
+
+        .challenge-reward {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1e293b;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .challenge-progress {
+            margin-top: 10px;
+        }
+
+        .challenge-progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .challenge-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .challenge-card.completed .challenge-progress-fill {
+            background: var(--success);
+        }
+
+        .challenge-status {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Weekly Challenge Special */
+        .weekly-challenge {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(109, 40, 217, 0.2));
+            border: 2px solid #8b5cf6;
+        }
+
+        .weekly-challenge .challenge-reward {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+        }
+
+        /* Rewards Section */
+        .reward-unlock {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 3px solid #fbbf24;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .reward-unlock.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .reward-unlock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            display: none;
+        }
+
+        .reward-unlock-overlay.show {
+            display: block;
+        }
+
+        .reward-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .reward-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+
+        .reward-xp {
+            font-size: 1.2rem;
+            color: var(--success);
+        }
+
+        .reward-close {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: #fbbf24;
+            color: #1e293b;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Streak Milestones */
+        .streak-milestones {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .milestone {
+            text-align: center;
+            opacity: 0.4;
+        }
+
+        .milestone.achieved {
+            opacity: 1;
+        }
+
+        .milestone.next {
+            opacity: 0.7;
+            color: var(--primary);
+        }
+
+        .milestone-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .milestone-days {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Leaderboard / Stats */
+        .total-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .total-stat {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .total-stat .num {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+
+        .total-stat .lbl {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        /* Tabs adjustment for more tabs */
+        .tabs {
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            font-size: 0.8rem;
+            padding: 8px 5px;
+        }
+
+        @media (max-width: 600px) {
+            .medals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tab {
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -491,8 +857,26 @@
         <div class="tabs">
             <button class="tab active" data-tab="dashboard">Dashboard</button>
             <button class="tab" data-tab="entry">Eintragen</button>
+            <button class="tab" data-tab="achievements">Erfolge</button>
             <button class="tab" data-tab="history">Verlauf</button>
             <button class="tab" data-tab="workouts">Workouts</button>
+        </div>
+
+        <!-- XP Bar (shows on all tabs) -->
+        <div class="xp-container" id="xpContainer">
+            <div class="level-display">
+                <div class="level-badge">
+                    <div class="level-icon" id="levelIcon">1</div>
+                    <div class="level-info">
+                        <h3 id="levelTitle">Anfänger</h3>
+                        <span id="totalXP">0 XP gesamt</span>
+                    </div>
+                </div>
+            </div>
+            <div class="xp-bar">
+                <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+            <div class="xp-text" id="xpText">0 / 100 XP zum nächsten Level</div>
         </div>
 
         <!-- Dashboard Tab -->
@@ -635,6 +1019,52 @@
             </div>
         </div>
 
+        <!-- Achievements Tab -->
+        <div class="tab-content" id="achievements">
+            <!-- Daily Challenges -->
+            <div class="card">
+                <h2>⚡ Tägliche Herausforderungen</h2>
+                <div id="dailyChallenges">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Weekly Challenge -->
+            <div class="card">
+                <h2>🏆 Wochenherausforderung</h2>
+                <div id="weeklyChallenges">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Medals -->
+            <div class="card">
+                <h2>🏅 Medaillen</h2>
+                <div class="medals-grid" id="medalsGrid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Total Stats -->
+            <div class="card">
+                <h2>📊 Gesamt-Statistiken</h2>
+                <div class="total-stats">
+                    <div class="total-stat">
+                        <div class="num" id="totalTrainings">0</div>
+                        <div class="lbl">Trainings</div>
+                    </div>
+                    <div class="total-stat">
+                        <div class="num" id="totalMedals">0</div>
+                        <div class="lbl">Medaillen</div>
+                    </div>
+                    <div class="total-stat">
+                        <div class="num" id="bestStreak">0</div>
+                        <div class="lbl">Bester Streak</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- History Tab -->
         <div class="tab-content" id="history">
             <div class="card">
@@ -745,6 +1175,15 @@
         </div>
     </div>
 
+    <!-- Reward Unlock Modal -->
+    <div class="reward-unlock-overlay" id="rewardOverlay"></div>
+    <div class="reward-unlock" id="rewardModal">
+        <div class="reward-icon" id="rewardIcon">🏆</div>
+        <div class="reward-title" id="rewardTitle">Neue Medaille!</div>
+        <div class="reward-xp" id="rewardXP">+50 XP</div>
+        <button class="reward-close" onclick="closeRewardModal()">Weiter</button>
+    </div>
+
     <script>
         // ============ DATA STORAGE ============
         const STORAGE_KEY = 'playbook2026';
@@ -803,6 +1242,97 @@
                 badge: 'cheat',
                 details: 'Ruhetag - Training optional, Ernährung frei'
             }
+        };
+
+        // ============ GAMIFICATION SYSTEM ============
+
+        // Level titles and XP requirements
+        const LEVELS = [
+            { level: 1, title: 'Anfänger', xpNeeded: 0 },
+            { level: 2, title: 'Rookie', xpNeeded: 100 },
+            { level: 3, title: 'Aufsteiger', xpNeeded: 250 },
+            { level: 4, title: 'Kämpfer', xpNeeded: 500 },
+            { level: 5, title: 'Athlet', xpNeeded: 800 },
+            { level: 6, title: 'Krieger', xpNeeded: 1200 },
+            { level: 7, title: 'Champion', xpNeeded: 1700 },
+            { level: 8, title: 'Elite', xpNeeded: 2300 },
+            { level: 9, title: 'Meister', xpNeeded: 3000 },
+            { level: 10, title: 'Legende', xpNeeded: 4000 },
+            { level: 11, title: 'Unstoppable', xpNeeded: 5500 },
+            { level: 12, title: 'Titan', xpNeeded: 7500 },
+            { level: 13, title: 'Gott-Modus', xpNeeded: 10000 }
+        ];
+
+        // Medal definitions
+        const MEDALS = [
+            // Streak Medals
+            { id: 'streak_7', icon: '🔥', name: '7-Tage-Feuer', desc: '7 Tage Streak', xp: 50, check: (stats) => stats.bestStreak >= 7 },
+            { id: 'streak_14', icon: '💪', name: '2-Wochen-Warrior', desc: '14 Tage Streak', xp: 100, check: (stats) => stats.bestStreak >= 14 },
+            { id: 'streak_30', icon: '⚡', name: 'Monats-Monster', desc: '30 Tage Streak', xp: 200, check: (stats) => stats.bestStreak >= 30 },
+            { id: 'streak_60', icon: '🏆', name: 'Unaufhaltsam', desc: '60 Tage Streak', xp: 400, check: (stats) => stats.bestStreak >= 60 },
+            { id: 'streak_100', icon: '👑', name: 'Hundert-Tage-König', desc: '100 Tage Streak', xp: 750, check: (stats) => stats.bestStreak >= 100 },
+
+            // Training Medals
+            { id: 'train_10', icon: '🎯', name: 'Erster Meilenstein', desc: '10 Trainings', xp: 30, check: (stats) => stats.totalTrainings >= 10 },
+            { id: 'train_25', icon: '💎', name: 'Diamant-Disziplin', desc: '25 Trainings', xp: 60, check: (stats) => stats.totalTrainings >= 25 },
+            { id: 'train_50', icon: '🌟', name: 'Halb-Hundert', desc: '50 Trainings', xp: 120, check: (stats) => stats.totalTrainings >= 50 },
+            { id: 'train_100', icon: '💯', name: 'Centurion', desc: '100 Trainings', xp: 250, check: (stats) => stats.totalTrainings >= 100 },
+            { id: 'train_200', icon: '🦁', name: 'Löwenherz', desc: '200 Trainings', xp: 500, check: (stats) => stats.totalTrainings >= 200 },
+
+            // Weight Loss Medals
+            { id: 'weight_5', icon: '📉', name: 'Erste Erfolge', desc: '5 kg verloren', xp: 100, check: (stats) => stats.weightLost >= 5 },
+            { id: 'weight_10', icon: '🎉', name: 'Zweistellig', desc: '10 kg verloren', xp: 250, check: (stats) => stats.weightLost >= 10 },
+            { id: 'weight_15', icon: '🚀', name: 'Transformation', desc: '15 kg verloren', xp: 500, check: (stats) => stats.weightLost >= 15 },
+            { id: 'weight_goal', icon: '🏁', name: 'Ziel erreicht!', desc: 'Unter 90 kg', xp: 1000, check: (stats) => stats.currentWeight && stats.currentWeight < 90 },
+
+            // Protein Medals
+            { id: 'protein_7', icon: '🥩', name: 'Protein-Pro', desc: '7 Tage 180g+ Protein', xp: 75, check: (stats) => stats.proteinStreak >= 7 },
+            { id: 'protein_30', icon: '🍗', name: 'Protein-Meister', desc: '30 Tage 180g+ Protein', xp: 200, check: (stats) => stats.proteinStreak >= 30 },
+
+            // IF Medals
+            { id: 'if_14', icon: '⏰', name: 'IF-Anfänger', desc: '14 Tage IF eingehalten', xp: 50, check: (stats) => stats.ifStreak >= 14 },
+            { id: 'if_30', icon: '🕐', name: 'IF-Profi', desc: '30 Tage IF eingehalten', xp: 100, check: (stats) => stats.ifStreak >= 30 },
+            { id: 'if_60', icon: '⌛', name: 'IF-Meister', desc: '60 Tage IF eingehalten', xp: 200, check: (stats) => stats.ifStreak >= 60 },
+
+            // Perfect Week Medals
+            { id: 'perfect_1', icon: '✨', name: 'Perfekte Woche', desc: '1 perfekte Woche', xp: 100, check: (stats) => stats.perfectWeeks >= 1 },
+            { id: 'perfect_4', icon: '🌈', name: 'Perfekter Monat', desc: '4 perfekte Wochen', xp: 300, check: (stats) => stats.perfectWeeks >= 4 },
+            { id: 'perfect_12', icon: '💫', name: 'Perfektes Quartal', desc: '12 perfekte Wochen', xp: 750, check: (stats) => stats.perfectWeeks >= 12 },
+
+            // Special Medals
+            { id: 'early_bird', icon: '🌅', name: 'Früher Vogel', desc: 'Ersten Eintrag gemacht', xp: 10, check: (stats) => stats.totalEntries >= 1 },
+            { id: 'consistency', icon: '📊', name: 'Daten-Nerd', desc: '30 Tage geloggt', xp: 75, check: (stats) => stats.totalEntries >= 30 },
+            { id: 'quarter_q1', icon: '🎯', name: 'Q1 Sieger', desc: 'Q1 Ziel erreicht', xp: 300, check: (stats) => stats.q1Reached },
+            { id: 'quarter_q2', icon: '☀️', name: 'Q2 Sieger', desc: 'Q2 Ziel erreicht', xp: 300, check: (stats) => stats.q2Reached },
+            { id: 'quarter_q3', icon: '🍂', name: 'Q3 Sieger', desc: 'Q3 Ziel erreicht', xp: 300, check: (stats) => stats.q3Reached },
+            { id: 'quarter_q4', icon: '❄️', name: 'Q4 Sieger', desc: 'Q4 Ziel erreicht', xp: 500, check: (stats) => stats.q4Reached }
+        ];
+
+        // Daily Challenges (rotate based on day)
+        const DAILY_CHALLENGES = [
+            { id: 'train_today', icon: '💪', name: 'Training absolvieren', desc: 'Schließe dein heutiges Training ab', xp: 20, check: (todayEntry) => todayEntry?.training },
+            { id: 'protein_180', icon: '🥩', name: 'Protein-Ziel', desc: 'Erreiche 180g Protein', xp: 15, check: (todayEntry) => todayEntry?.protein >= 180 },
+            { id: 'if_today', icon: '⏰', name: 'IF einhalten', desc: 'Halte das 12-20 Uhr Fenster ein', xp: 10, check: (todayEntry) => todayEntry?.if },
+            { id: 'calorie_zone', icon: '🎯', name: 'Kalorien-Zone', desc: 'Bleib zwischen 2100-2400 kcal', xp: 15, check: (todayEntry) => todayEntry?.calories >= 2100 && todayEntry?.calories <= 2400 },
+            { id: 'log_weight', icon: '⚖️', name: 'Wiegen', desc: 'Trage dein Gewicht ein', xp: 5, check: (todayEntry) => todayEntry?.weight }
+        ];
+
+        // Weekly Challenges (rotate based on week number)
+        const WEEKLY_CHALLENGES = [
+            { id: 'perfect_week', icon: '🏆', name: 'Perfekte Woche', desc: '6/6 Trainings diese Woche', xp: 150, target: 6, getProgress: (stats) => stats.weekTrainings },
+            { id: 'protein_week', icon: '🥩', name: 'Protein-Woche', desc: '5 Tage mit 180g+ Protein', xp: 100, target: 5, getProgress: (stats) => stats.weekProteinDays },
+            { id: 'if_week', icon: '⏰', name: 'IF-Woche', desc: '6 Tage IF eingehalten', xp: 75, target: 6, getProgress: (stats) => stats.weekIFDays },
+            { id: 'weight_down', icon: '📉', name: 'Abwärtstrend', desc: 'Gewicht diese Woche reduzieren', xp: 100, target: 1, getProgress: (stats) => stats.weekWeightDown ? 1 : 0 }
+        ];
+
+        // XP rewards for actions
+        const XP_REWARDS = {
+            training: 25,
+            proteinGoal: 10,
+            ifDone: 5,
+            calorieZone: 10,
+            logWeight: 3,
+            logEntry: 2
         };
 
         // ============ HELPER FUNCTIONS ============
@@ -1028,6 +1558,390 @@
             };
         }
 
+        // ============ GAMIFICATION FUNCTIONS ============
+
+        function getGamificationData() {
+            const data = getData();
+            if (!data.gamification) {
+                data.gamification = {
+                    xp: 0,
+                    unlockedMedals: {},
+                    completedDailyChallenges: {},
+                    completedWeeklyChallenges: {},
+                    bestStreak: 0,
+                    perfectWeeks: 0
+                };
+                saveData(data);
+            }
+            return data.gamification;
+        }
+
+        function saveGamificationData(gamData) {
+            const data = getData();
+            data.gamification = gamData;
+            saveData(data);
+        }
+
+        function addXP(amount, reason) {
+            const gamData = getGamificationData();
+            const oldLevel = getCurrentLevel(gamData.xp);
+            gamData.xp += amount;
+            const newLevel = getCurrentLevel(gamData.xp);
+            saveGamificationData(gamData);
+
+            // Check for level up
+            if (newLevel.level > oldLevel.level) {
+                showReward('🎉', `Level ${newLevel.level} erreicht!`, `${newLevel.title}`, amount);
+            }
+
+            updateXPDisplay();
+            return gamData.xp;
+        }
+
+        function getCurrentLevel(xp) {
+            let currentLevel = LEVELS[0];
+            for (const level of LEVELS) {
+                if (xp >= level.xpNeeded) {
+                    currentLevel = level;
+                } else {
+                    break;
+                }
+            }
+            return currentLevel;
+        }
+
+        function getNextLevel(xp) {
+            for (const level of LEVELS) {
+                if (xp < level.xpNeeded) {
+                    return level;
+                }
+            }
+            return null; // Max level reached
+        }
+
+        function calculateStats() {
+            const data = getData();
+            const entries = data.entries;
+            const sortedDates = Object.keys(entries).sort();
+
+            let stats = {
+                totalTrainings: 0,
+                totalEntries: sortedDates.length,
+                weightLost: 0,
+                currentWeight: null,
+                bestStreak: 0,
+                currentStreak: calculateStreak(),
+                proteinStreak: 0,
+                ifStreak: 0,
+                perfectWeeks: 0,
+                weekTrainings: 0,
+                weekProteinDays: 0,
+                weekIFDays: 0,
+                weekWeightDown: false,
+                q1Reached: false,
+                q2Reached: false,
+                q3Reached: false,
+                q4Reached: false
+            };
+
+            // Calculate totals
+            let currentProteinStreak = 0;
+            let currentIFStreak = 0;
+            let weekStart = getWeekStart(new Date());
+            let firstWeekWeight = null;
+            let lastWeekWeight = null;
+
+            for (const dateStr of sortedDates) {
+                const entry = entries[dateStr];
+                const entryDate = parseDate(dateStr);
+
+                if (entry.training) stats.totalTrainings++;
+                if (entry.weight) stats.currentWeight = entry.weight;
+
+                // Protein streak
+                if (entry.protein >= 180) {
+                    currentProteinStreak++;
+                    stats.proteinStreak = Math.max(stats.proteinStreak, currentProteinStreak);
+                } else {
+                    currentProteinStreak = 0;
+                }
+
+                // IF streak
+                if (entry.if) {
+                    currentIFStreak++;
+                    stats.ifStreak = Math.max(stats.ifStreak, currentIFStreak);
+                } else {
+                    currentIFStreak = 0;
+                }
+
+                // This week stats
+                if (entryDate >= weekStart) {
+                    if (entry.training) stats.weekTrainings++;
+                    if (entry.protein >= 180) stats.weekProteinDays++;
+                    if (entry.if) stats.weekIFDays++;
+                    if (entry.weight) {
+                        if (!firstWeekWeight) firstWeekWeight = entry.weight;
+                        lastWeekWeight = entry.weight;
+                    }
+                }
+            }
+
+            // Weight loss
+            if (stats.currentWeight) {
+                stats.weightLost = START_WEIGHT - stats.currentWeight;
+            }
+
+            // Week weight down
+            if (firstWeekWeight && lastWeekWeight && lastWeekWeight < firstWeekWeight) {
+                stats.weekWeightDown = true;
+            }
+
+            // Best streak (use gamification data or current)
+            const gamData = getGamificationData();
+            stats.bestStreak = Math.max(gamData.bestStreak || 0, stats.currentStreak);
+
+            // Update best streak if needed
+            if (stats.currentStreak > (gamData.bestStreak || 0)) {
+                gamData.bestStreak = stats.currentStreak;
+                saveGamificationData(gamData);
+            }
+
+            // Perfect weeks
+            stats.perfectWeeks = gamData.perfectWeeks || 0;
+
+            // Quarter goals
+            const today = new Date();
+            if (stats.currentWeight) {
+                if (today >= new Date('2026-03-31') && stats.currentWeight <= 99.5) stats.q1Reached = true;
+                if (today >= new Date('2026-06-30') && stats.currentWeight <= 95.5) stats.q2Reached = true;
+                if (today >= new Date('2026-09-30') && stats.currentWeight <= 92.5) stats.q3Reached = true;
+                if (today >= new Date('2026-12-23') && stats.currentWeight <= 89.9) stats.q4Reached = true;
+            }
+
+            return stats;
+        }
+
+        function getWeekStart(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            d.setDate(diff);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        function getWeekNumber(date) {
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+            const yearStart = new Date(d.getFullYear(), 0, 1);
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
+        function checkAndUnlockMedals() {
+            const stats = calculateStats();
+            const gamData = getGamificationData();
+            let newMedals = [];
+
+            for (const medal of MEDALS) {
+                if (!gamData.unlockedMedals[medal.id] && medal.check(stats)) {
+                    gamData.unlockedMedals[medal.id] = {
+                        unlockedAt: new Date().toISOString(),
+                        xpAwarded: medal.xp
+                    };
+                    gamData.xp += medal.xp;
+                    newMedals.push(medal);
+                }
+            }
+
+            saveGamificationData(gamData);
+
+            // Show unlock animation for new medals
+            if (newMedals.length > 0) {
+                showMedalUnlock(newMedals[0]);
+            }
+
+            return newMedals;
+        }
+
+        function showMedalUnlock(medal) {
+            showReward(medal.icon, 'Neue Medaille!', medal.name, medal.xp);
+        }
+
+        function showReward(icon, title, subtitle, xp) {
+            document.getElementById('rewardIcon').textContent = icon;
+            document.getElementById('rewardTitle').textContent = title;
+            document.getElementById('rewardXP').textContent = subtitle + (xp ? ` +${xp} XP` : '');
+            document.getElementById('rewardOverlay').classList.add('show');
+            document.getElementById('rewardModal').classList.add('show');
+        }
+
+        function closeRewardModal() {
+            document.getElementById('rewardOverlay').classList.remove('show');
+            document.getElementById('rewardModal').classList.remove('show');
+            updateXPDisplay();
+            updateAchievements();
+        }
+
+        function updateXPDisplay() {
+            const gamData = getGamificationData();
+            const currentLevel = getCurrentLevel(gamData.xp);
+            const nextLevel = getNextLevel(gamData.xp);
+
+            document.getElementById('levelIcon').textContent = currentLevel.level;
+            document.getElementById('levelTitle').textContent = currentLevel.title;
+            document.getElementById('totalXP').textContent = `${gamData.xp} XP gesamt`;
+
+            if (nextLevel) {
+                const xpInLevel = gamData.xp - currentLevel.xpNeeded;
+                const xpForLevel = nextLevel.xpNeeded - currentLevel.xpNeeded;
+                const progress = (xpInLevel / xpForLevel) * 100;
+                document.getElementById('xpFill').style.width = `${progress}%`;
+                document.getElementById('xpText').textContent = `${xpInLevel} / ${xpForLevel} XP zum Level ${nextLevel.level}`;
+            } else {
+                document.getElementById('xpFill').style.width = '100%';
+                document.getElementById('xpText').textContent = 'MAX LEVEL erreicht!';
+            }
+        }
+
+        function updateAchievements() {
+            const gamData = getGamificationData();
+            const stats = calculateStats();
+            const data = getData();
+            const todayEntry = data.entries[formatDate(new Date())] || {};
+
+            // Update Daily Challenges
+            const dailyContainer = document.getElementById('dailyChallenges');
+            const today = formatDate(new Date());
+
+            dailyContainer.innerHTML = DAILY_CHALLENGES.map(challenge => {
+                const completed = challenge.check(todayEntry);
+                const alreadyClaimed = gamData.completedDailyChallenges[today]?.[challenge.id];
+
+                return `
+                    <div class="challenge-card ${completed ? 'completed' : 'active'}">
+                        <div class="challenge-header">
+                            <div class="challenge-title">
+                                <span class="icon">${challenge.icon}</span>
+                                <span>${challenge.name}</span>
+                            </div>
+                            <span class="challenge-reward">${alreadyClaimed ? '✓' : `+${challenge.xp} XP`}</span>
+                        </div>
+                        <div class="challenge-status">${challenge.desc}</div>
+                        <div class="challenge-progress">
+                            <div class="challenge-progress-bar">
+                                <div class="challenge-progress-fill" style="width: ${completed ? 100 : 0}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update Weekly Challenge
+            const weeklyContainer = document.getElementById('weeklyChallenges');
+            const weekNum = getWeekNumber(new Date());
+            const weeklyChallenge = WEEKLY_CHALLENGES[weekNum % WEEKLY_CHALLENGES.length];
+            const weeklyProgress = weeklyChallenge.getProgress(stats);
+            const weeklyCompleted = weeklyProgress >= weeklyChallenge.target;
+            const weeklyKey = `${new Date().getFullYear()}-W${weekNum}`;
+            const weeklyClaimed = gamData.completedWeeklyChallenges[weeklyKey]?.[weeklyChallenge.id];
+
+            weeklyContainer.innerHTML = `
+                <div class="challenge-card weekly-challenge ${weeklyCompleted ? 'completed' : 'active'}">
+                    <div class="challenge-header">
+                        <div class="challenge-title">
+                            <span class="icon">${weeklyChallenge.icon}</span>
+                            <span>${weeklyChallenge.name}</span>
+                        </div>
+                        <span class="challenge-reward">${weeklyClaimed ? '✓' : `+${weeklyChallenge.xp} XP`}</span>
+                    </div>
+                    <div class="challenge-status">${weeklyChallenge.desc}</div>
+                    <div class="challenge-progress">
+                        <div class="challenge-progress-bar">
+                            <div class="challenge-progress-fill" style="width: ${Math.min(100, (weeklyProgress / weeklyChallenge.target) * 100)}%"></div>
+                        </div>
+                        <div class="challenge-status">${weeklyProgress} / ${weeklyChallenge.target}</div>
+                    </div>
+                </div>
+            `;
+
+            // Update Medals Grid
+            const medalsContainer = document.getElementById('medalsGrid');
+            medalsContainer.innerHTML = MEDALS.map(medal => {
+                const unlocked = gamData.unlockedMedals[medal.id];
+                const unlockedDate = unlocked ? new Date(unlocked.unlockedAt).toLocaleDateString('de-DE') : '';
+
+                return `
+                    <div class="medal-item ${unlocked ? 'unlocked' : 'locked'}">
+                        <div class="medal-icon">${medal.icon}</div>
+                        <div class="medal-name">${medal.name}</div>
+                        <div class="medal-desc">${medal.desc}</div>
+                        ${unlocked ? `<div class="medal-date">${unlockedDate}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Update total stats
+            document.getElementById('totalTrainings').textContent = stats.totalTrainings;
+            document.getElementById('totalMedals').textContent = Object.keys(gamData.unlockedMedals).length;
+            document.getElementById('bestStreak').textContent = stats.bestStreak;
+        }
+
+        function processDailyXP(entry, isNewEntry) {
+            if (!isNewEntry) return;
+
+            const gamData = getGamificationData();
+            const today = formatDate(new Date());
+            let xpEarned = 0;
+
+            // Initialize daily challenges tracking for today
+            if (!gamData.completedDailyChallenges[today]) {
+                gamData.completedDailyChallenges[today] = {};
+            }
+
+            // Check each daily challenge
+            for (const challenge of DAILY_CHALLENGES) {
+                if (!gamData.completedDailyChallenges[today][challenge.id] && challenge.check(entry)) {
+                    gamData.completedDailyChallenges[today][challenge.id] = true;
+                    xpEarned += challenge.xp;
+                }
+            }
+
+            // Check weekly challenge
+            const weekNum = getWeekNumber(new Date());
+            const weeklyKey = `${new Date().getFullYear()}-W${weekNum}`;
+            const weeklyChallenge = WEEKLY_CHALLENGES[weekNum % WEEKLY_CHALLENGES.length];
+            const stats = calculateStats();
+
+            if (!gamData.completedWeeklyChallenges[weeklyKey]) {
+                gamData.completedWeeklyChallenges[weeklyKey] = {};
+            }
+
+            if (!gamData.completedWeeklyChallenges[weeklyKey][weeklyChallenge.id]) {
+                const progress = weeklyChallenge.getProgress(stats);
+                if (progress >= weeklyChallenge.target) {
+                    gamData.completedWeeklyChallenges[weeklyKey][weeklyChallenge.id] = true;
+                    xpEarned += weeklyChallenge.xp;
+
+                    // Track perfect weeks
+                    if (weeklyChallenge.id === 'perfect_week') {
+                        gamData.perfectWeeks = (gamData.perfectWeeks || 0) + 1;
+                    }
+                }
+            }
+
+            if (xpEarned > 0) {
+                gamData.xp += xpEarned;
+                saveGamificationData(gamData);
+            }
+
+            // Check for new medals
+            checkAndUnlockMedals();
+
+            updateXPDisplay();
+            updateAchievements();
+        }
+
         // ============ UI UPDATE FUNCTIONS ============
         function updateDashboard() {
             const data = getData();
@@ -1218,6 +2132,9 @@
                     if (tab.dataset.tab === 'history') {
                         updateHistory();
                     }
+                    if (tab.dataset.tab === 'achievements') {
+                        updateAchievements();
+                    }
                 });
             });
 
@@ -1252,8 +2169,15 @@
 
                 saveData(data);
 
+                // Process gamification XP and check achievements
+                const isNewEntry = !wasTrainingBefore ||
+                    entry.protein !== data.entries[dateStr]?.protein ||
+                    entry.if !== data.entries[dateStr]?.if;
+                processDailyXP(entry, true);
+
                 updateQuickStats(entry);
                 updateDashboard();
+                updateXPDisplay();
 
                 // Visual feedback
                 const btn = e.target.querySelector('button');
@@ -1269,6 +2193,8 @@
             // Initialize
             initForm();
             updateDashboard();
+            updateXPDisplay();
+            updateAchievements();
             scheduleMiddnightRefresh(); // Auto-update at midnight
         });
     </script>
