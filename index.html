@@ -478,6 +478,7 @@
         <header>
             <h1>PLAYBOOK 2026</h1>
             <p class="subtitle">Ziel: 89,9 kg bis 23. Dezember 2026</p>
+            <p class="subtitle" id="currentDate" style="margin-top: 5px; font-size: 0.85rem;"></p>
         </header>
 
         <!-- Never Miss Twice Alert -->
@@ -750,7 +751,22 @@
         const START_WEIGHT = 109;
         const GOAL_WEIGHT = 89.9;
         const GOAL_DATE = new Date('2026-12-23');
-        const START_DATE = new Date('2026-01-01');
+
+        // Start date: use first entry date or Jan 1, 2026 (whichever applies)
+        function getStartDate() {
+            const data = getData();
+            const entries = Object.keys(data.entries).sort();
+            if (entries.length > 0) {
+                const firstEntry = new Date(entries[0] + 'T00:00:00');
+                const jan2026 = new Date('2026-01-01');
+                return firstEntry < jan2026 ? firstEntry : jan2026;
+            }
+            // If no entries yet, use today or Jan 2026
+            const today = new Date();
+            const jan2026 = new Date('2026-01-01');
+            return today < jan2026 ? today : jan2026;
+        }
+        const START_DATE = new Date('2026-01-01'); // Fallback for rotation calc
 
         // Quarter Goals
         const QUARTER_GOALS = [
@@ -1032,10 +1048,15 @@
                 document.getElementById('progressFill').style.width = `${Math.min(100, Math.max(0, progress))}%`;
             }
 
-            // Days left
+            // Days left and current date display
             const today = new Date();
             const daysLeft = Math.ceil((GOAL_DATE - today) / (1000 * 60 * 60 * 24));
             document.getElementById('daysLeft').textContent = daysLeft;
+
+            // Show current date in header
+            const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('currentDate').textContent =
+                `Heute: ${today.toLocaleDateString('de-DE', dateOptions)}`;
 
             // Weekly average
             document.getElementById('weeklyAvg').textContent = weeklyStats.weight ? `${weeklyStats.weight}` : '--';
