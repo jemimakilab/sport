@@ -823,21 +823,29 @@
 
             const data = getData();
 
-            // Count training days since start to determine A/B and B-rotation
-            // Simple approach: alternate A/B, B cycles through B1/B2/B3
-            const entries = Object.keys(data.entries).sort();
+            // Calculate days since start, excluding Saturdays
+            // This ensures strict A-B-A-B rotation based on actual training days
+            let dayCount = 0;
+            const startDate = new Date(START_DATE);
+            const currentDate = new Date(today);
+            currentDate.setHours(0, 0, 0, 0);
+            startDate.setHours(0, 0, 0, 0);
 
-            // Count consecutive training days to determine today's type
-            let trainingsCount = entries.filter(d => data.entries[d].training).length;
+            for (let d = new Date(startDate); d <= currentDate; d.setDate(d.getDate() + 1)) {
+                // Skip Saturdays (Cheat Days don't count in rotation)
+                if (d.getDay() !== 6) {
+                    dayCount++;
+                }
+            }
 
-            // If today is odd training number -> A, even -> B
-            // Simpler: just use the day pattern
-            const isADay = trainingsCount % 2 === 0;
+            // Odd days = A (Laufen), Even days = B (Kraft)
+            // Day 1 = A, Day 2 = B, Day 3 = A, Day 4 = B, etc.
+            const isADay = dayCount % 2 === 1;
 
             if (isADay) {
                 return 'A';
             } else {
-                // Determine which B workout
+                // Determine which B workout based on rotation
                 const bRotation = data.bRotation || 0;
                 const bWorkouts = ['B1', 'B2', 'B3'];
                 return bWorkouts[bRotation % 3];
@@ -848,6 +856,23 @@
             const data = getData();
             data.bRotation = ((data.bRotation || 0) + 1) % 3;
             saveData(data);
+        }
+
+        // Auto-refresh at midnight
+        function scheduleMiddnightRefresh() {
+            const now = new Date();
+            const midnight = new Date(now);
+            midnight.setDate(midnight.getDate() + 1);
+            midnight.setHours(0, 0, 1, 0); // 00:00:01 next day
+
+            const msUntilMidnight = midnight - now;
+
+            setTimeout(() => {
+                updateDashboard();
+                updateHistory();
+                initForm();
+                scheduleMiddnightRefresh(); // Schedule next refresh
+            }, msUntilMidnight);
         }
 
         // ============ STREAK CALCULATION ============
@@ -1223,6 +1248,7 @@
             // Initialize
             initForm();
             updateDashboard();
+            scheduleMiddnightRefresh(); // Auto-update at midnight
         });
     </script>
 </body>
