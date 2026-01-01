@@ -1079,10 +1079,6 @@
                         <input type="date" id="entryDate" required>
                     </div>
                     <div class="form-group">
-                        <label>Gewicht (kg)</label>
-                        <input type="number" id="entryWeight" step="0.1" min="50" max="200" placeholder="z.B. 103.5">
-                    </div>
-                    <div class="form-group">
                         <label>Kalorien</label>
                         <input type="number" id="entryCalories" min="0" max="10000" placeholder="z.B. 2300">
                     </div>
@@ -1129,6 +1125,23 @@
 
         <!-- Charts Tab -->
         <div class="tab-content" id="charts">
+            <!-- Weight Entry Form -->
+            <div class="card">
+                <h2>⚖️ Gewicht eintragen</h2>
+                <form id="weightForm" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                        <label>Datum</label>
+                        <input type="date" id="weightDate" required>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                        <label>Gewicht (kg)</label>
+                        <input type="number" id="weightValue" step="0.1" min="50" max="200" placeholder="z.B. 103.5" required>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="flex: 0 0 auto; padding: 12px 24px;">💾 Speichern</button>
+                </form>
+                <p style="font-size: 0.8rem; color: var(--gray); margin-top: 10px;">💡 Tipp: Wiege dich jeden Donnerstag zur gleichen Zeit</p>
+            </div>
+
             <div class="card">
                 <h2>📈 Gewichtsverlauf</h2>
                 <div class="time-filter">
@@ -2547,7 +2560,6 @@
             const data = getData();
             const entry = data.entries[dateStr] || {};
 
-            document.getElementById('entryWeight').value = entry.weight || '';
             document.getElementById('entryCalories').value = entry.calories || '';
             document.getElementById('entryProtein').value = entry.protein || '';
             document.getElementById('trainingDone').checked = entry.training || false;
@@ -2613,8 +2625,11 @@
                 const wasTrainingBefore = data.entries[dateStr]?.training;
                 const isTrainingNow = document.getElementById('trainingDone').checked;
 
+                // Preserve existing weight data (weight is entered separately in Grafik tab)
+                const existingWeight = data.entries[dateStr]?.weight || null;
+
                 const entry = {
-                    weight: parseFloat(document.getElementById('entryWeight').value) || null,
+                    weight: existingWeight,
                     calories: parseInt(document.getElementById('entryCalories').value) || null,
                     protein: parseInt(document.getElementById('entryProtein').value) || null,
                     training: isTrainingNow,
@@ -2654,6 +2669,50 @@
                     btn.style.background = '';
                 }, 2000);
             });
+
+            // Weight form submission (in Grafik tab)
+            document.getElementById('weightForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const dateStr = document.getElementById('weightDate').value;
+                const weight = parseFloat(document.getElementById('weightValue').value);
+
+                if (!dateStr || !weight) return;
+
+                const data = getData();
+
+                // Create or update entry for this date
+                if (!data.entries[dateStr]) {
+                    data.entries[dateStr] = {};
+                }
+                data.entries[dateStr].weight = weight;
+
+                saveData(data);
+
+                // Update displays
+                updateDashboard();
+                drawChart(currentChartDays);
+                updateChartStats(currentChartDays);
+
+                // Add XP for logging weight
+                addXP(XP_REWARDS.logWeight, 'Gewicht eingetragen');
+
+                // Visual feedback
+                const btn = e.target.querySelector('button');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Gespeichert!';
+                btn.style.background = 'var(--success)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+
+                // Clear weight input for next entry
+                document.getElementById('weightValue').value = '';
+            });
+
+            // Initialize weight form date to today
+            document.getElementById('weightDate').value = formatDate(new Date());
 
             // Initialize
             initForm();
