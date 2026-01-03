@@ -1055,6 +1055,206 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ============ SETTINGS STYLES ============ */
+        .settings-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .setting-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .setting-item label {
+            display: block;
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .gender-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .gender-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .gender-btn.active {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.2);
+            color: white;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+        }
+
+        .slider-value {
+            min-width: 80px;
+            text-align: right;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .activity-levels {
+            display: grid;
+            gap: 12px;
+        }
+
+        .activity-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .activity-btn:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-btn.active {
+            border-color: var(--success);
+            background: rgba(22, 163, 74, 0.15);
+        }
+
+        .activity-icon {
+            font-size: 2rem;
+            width: 50px;
+            text-align: center;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-name {
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .activity-desc {
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+
+        .activity-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .activity-stats span {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .activity-btn.active .activity-stats span {
+            background: rgba(22, 163, 74, 0.3);
+            color: var(--success);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .preview-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .preview-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .preview-item .label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .formula-item h4 {
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .formula-item code {
+            display: block;
+            color: var(--gray);
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+
+        @media (max-width: 600px) {
+            .preview-grid, .formula-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1079,6 +1279,7 @@
             <button class="tab" data-tab="achievements">Erfolge</button>
             <button class="tab" data-tab="history">Verlauf</button>
             <button class="tab" data-tab="workouts">Workouts</button>
+            <button class="tab" data-tab="settings">⚙️</button>
         </div>
 
         <!-- XP Bar (shows on all tabs) -->
@@ -1528,6 +1729,125 @@
                 </div>
             </div>
         </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings">
+            <div class="card">
+                <h2>⚙️ Persönliche Einstellungen</h2>
+                <p style="color: var(--gray); margin-bottom: 20px;">Diese Daten werden für die Berechnung deiner wissenschaftlichen Ziele verwendet.</p>
+
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>Geschlecht</label>
+                        <div class="gender-toggle">
+                            <button type="button" class="gender-btn active" data-gender="male">♂ Männlich</button>
+                            <button type="button" class="gender-btn" data-gender="female">♀ Weiblich</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <label>Körpergröße</label>
+                        <div class="slider-container">
+                            <input type="range" id="settingHeight" min="150" max="210" value="183">
+                            <span class="slider-value" id="heightValue">183 cm</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <label>Alter</label>
+                        <div class="slider-container">
+                            <input type="range" id="settingAge" min="16" max="80" value="26">
+                            <span class="slider-value" id="ageValue">26 Jahre</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🏃 Aktivitätslevel</h2>
+                <p style="color: var(--gray); margin-bottom: 20px;">Wähle dein Aktivitätslevel für angepasste Protein- und Kalorienziele.</p>
+
+                <div class="activity-levels">
+                    <button class="activity-btn" data-activity="sedentary">
+                        <div class="activity-icon">🪑</div>
+                        <div class="activity-info">
+                            <div class="activity-name">Wenig aktiv</div>
+                            <div class="activity-desc">Sitzende Tätigkeit, kein Sport</div>
+                            <div class="activity-stats">
+                                <span>PAL: 1.2</span>
+                                <span>Protein: 1.0g/kg</span>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="activity-btn active" data-activity="moderate">
+                        <div class="activity-icon">🚶</div>
+                        <div class="activity-info">
+                            <div class="activity-name">Moderat aktiv</div>
+                            <div class="activity-desc">Leichte Aktivität, 2-3x Sport/Woche</div>
+                            <div class="activity-stats">
+                                <span>PAL: 1.5</span>
+                                <span>Protein: 1.5g/kg</span>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="activity-btn" data-activity="active">
+                        <div class="activity-icon">🏃</div>
+                        <div class="activity-info">
+                            <div class="activity-name">Sehr aktiv</div>
+                            <div class="activity-desc">Aktiver Job, 4-5x Sport/Woche</div>
+                            <div class="activity-stats">
+                                <span>PAL: 1.8</span>
+                                <span>Protein: 1.8g/kg</span>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="activity-btn" data-activity="athletic">
+                        <div class="activity-icon">💪</div>
+                        <div class="activity-info">
+                            <div class="activity-name">Athletisch</div>
+                            <div class="activity-desc">Intensives Training, täglich</div>
+                            <div class="activity-stats">
+                                <span>PAL: 2.2</span>
+                                <span>Protein: 2.2g/kg</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Aktuelle Werte (Vorschau)</h2>
+                <div class="preview-grid" id="settingsPreview">
+                    <!-- Wird per JS gefüllt -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📐 Verwendete Formeln</h2>
+                <div class="formula-grid">
+                    <div class="formula-item">
+                        <h4>BMI</h4>
+                        <code>Gewicht / (Größe in m)²</code>
+                    </div>
+                    <div class="formula-item">
+                        <h4>Grundumsatz (Mifflin-St. Jeor)</h4>
+                        <code>♂: 10×kg + 6.25×cm - 5×Alter + 5</code>
+                        <code>♀: 10×kg + 6.25×cm - 5×Alter - 161</code>
+                    </div>
+                    <div class="formula-item">
+                        <h4>Tagesbedarf (TDEE)</h4>
+                        <code>Grundumsatz × PAL-Faktor</code>
+                    </div>
+                    <div class="formula-item">
+                        <h4>Protein</h4>
+                        <code>Gewicht × Aktivitätsfaktor</code>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Reward Unlock Modal -->
@@ -1542,10 +1862,51 @@
     <script>
         // ============ DATA STORAGE ============
         const STORAGE_KEY = 'playbook2026';
+        const SETTINGS_KEY = 'playbook2026_settings';
         const START_WEIGHT = 109;
         const GOAL_WEIGHT = 89.9;
         const GOAL_DATE = new Date('2026-12-23');
-        const USER_HEIGHT = 1.83; // Körpergröße in Metern
+
+        // ============ AKTIVITÄTSLEVEL ============
+        const ACTIVITY_LEVELS = {
+            sedentary: { key: 'sedentary', label: 'Wenig aktiv', pal: 1.2, proteinFactor: 1.0 },
+            moderate: { key: 'moderate', label: 'Moderat aktiv', pal: 1.5, proteinFactor: 1.5 },
+            active: { key: 'active', label: 'Sehr aktiv', pal: 1.8, proteinFactor: 1.8 },
+            athletic: { key: 'athletic', label: 'Athletisch', pal: 2.2, proteinFactor: 2.2 }
+        };
+
+        // ============ USER SETTINGS ============
+        const DEFAULT_SETTINGS = {
+            height: 183,      // cm
+            age: 26,
+            gender: 'male',
+            activity: 'moderate'
+        };
+
+        function getUserSettings() {
+            const stored = localStorage.getItem(SETTINGS_KEY);
+            if (stored) {
+                return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
+            }
+            return { ...DEFAULT_SETTINGS };
+        }
+
+        function saveUserSettings(settings) {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            // Aktualisiere alle Anzeigen
+            updateDashboard();
+            updateScientificGoals();
+            updateSettingsPreview();
+        }
+
+        function getActivityLevel() {
+            const settings = getUserSettings();
+            return ACTIVITY_LEVELS[settings.activity] || ACTIVITY_LEVELS.moderate;
+        }
+
+        function getUserHeightM() {
+            return getUserSettings().height / 100;
+        }
 
         // ============ SCIENTIFIC CALCULATIONS ============
         /**
@@ -1556,8 +1917,12 @@
         function calculateScientificGoals(weight) {
             if (!weight) return null;
 
+            const settings = getUserSettings();
+            const heightM = settings.height / 100;
+            const activity = ACTIVITY_LEVELS[settings.activity] || ACTIVITY_LEVELS.moderate;
+
             // BMI Berechnung: Gewicht / (Größe²)
-            const bmi = weight / (USER_HEIGHT * USER_HEIGHT);
+            const bmi = weight / (heightM * heightM);
 
             // BMI Kategorie nach WHO
             let category, categoryClass;
@@ -1581,17 +1946,17 @@
                 categoryClass = 'obese';
             }
 
-            // Protein: 1,5g pro kg Körpergewicht (für Muskelerhalt bei Defizit)
-            const proteinGoal = Math.round(weight * 1.5);
+            // Protein: basierend auf Aktivitätslevel
+            const proteinGoal = Math.round(weight * activity.proteinFactor);
 
             // Kalorien: Grundumsatz nach Mifflin-St Jeor + Aktivität - Defizit
-            // Annahme: Mann, 30 Jahre, moderat aktiv
-            const bmr = 10 * weight + 6.25 * (USER_HEIGHT * 100) - 5 * 30 + 5;
-            const tdee = bmr * 1.55; // Moderat aktiv
+            const genderOffset = settings.gender === 'male' ? 5 : -161;
+            const bmr = 10 * weight + 6.25 * settings.height - 5 * settings.age + genderOffset;
+            const tdee = bmr * activity.pal;
             const calorieGoal = Math.round(tdee - 500); // 500 kcal Defizit
 
             // Idealgewicht bei BMI 22
-            const idealWeight = Math.round(22 * USER_HEIGHT * USER_HEIGHT * 10) / 10;
+            const idealWeight = Math.round(22 * heightM * heightM * 10) / 10;
 
             // Nächstes Meilenstein-Gewicht (5kg Schritte)
             const nextMilestone = Math.floor(weight / 5) * 5;
@@ -1646,7 +2011,8 @@
          */
         function getDynamicProteinGoal() {
             const weight = getLatestWeight();
-            return weight ? Math.round(weight * 1.5) : 180; // Fallback auf 180g
+            const activity = getActivityLevel();
+            return weight ? Math.round(weight * activity.proteinFactor) : 180; // Fallback auf 180g
         }
 
         // Start date: use first entry date or Jan 1, 2026 (whichever applies)
@@ -2984,12 +3350,134 @@
 
             // Initialize
             initForm();
+            initSettings();
             updateDashboard();
             updateXPDisplay();
             updateAchievements();
             initChartTab();
             scheduleMiddnightRefresh(); // Auto-update at midnight
         });
+
+        // ============ SETTINGS FUNCTIONS ============
+        function initSettings() {
+            const settings = getUserSettings();
+
+            // Slider für Größe
+            const heightSlider = document.getElementById('settingHeight');
+            const heightValue = document.getElementById('heightValue');
+            heightSlider.value = settings.height;
+            heightValue.textContent = `${settings.height} cm`;
+
+            heightSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                heightValue.textContent = `${value} cm`;
+                const newSettings = getUserSettings();
+                newSettings.height = value;
+                saveUserSettings(newSettings);
+            });
+
+            // Slider für Alter
+            const ageSlider = document.getElementById('settingAge');
+            const ageValue = document.getElementById('ageValue');
+            ageSlider.value = settings.age;
+            ageValue.textContent = `${settings.age} Jahre`;
+
+            ageSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                ageValue.textContent = `${value} Jahre`;
+                const newSettings = getUserSettings();
+                newSettings.age = value;
+                saveUserSettings(newSettings);
+            });
+
+            // Gender Buttons
+            document.querySelectorAll('.gender-btn').forEach(btn => {
+                if (btn.dataset.gender === settings.gender) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const newSettings = getUserSettings();
+                    newSettings.gender = btn.dataset.gender;
+                    saveUserSettings(newSettings);
+                });
+            });
+
+            // Activity Buttons
+            document.querySelectorAll('.activity-btn').forEach(btn => {
+                if (btn.dataset.activity === settings.activity) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.activity-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const newSettings = getUserSettings();
+                    newSettings.activity = btn.dataset.activity;
+                    saveUserSettings(newSettings);
+                });
+            });
+
+            // Initial preview update
+            updateSettingsPreview();
+        }
+
+        function updateSettingsPreview() {
+            const settings = getUserSettings();
+            const weight = getLatestWeight() || 100; // Fallback für Vorschau
+            const activity = ACTIVITY_LEVELS[settings.activity];
+            const heightM = settings.height / 100;
+
+            // BMI
+            const bmi = weight / (heightM * heightM);
+
+            // BMR (Mifflin-St Jeor)
+            const genderOffset = settings.gender === 'male' ? 5 : -161;
+            const bmr = 10 * weight + 6.25 * settings.height - 5 * settings.age + genderOffset;
+
+            // TDEE
+            const tdee = bmr * activity.pal;
+
+            // Protein
+            const protein = Math.round(weight * activity.proteinFactor);
+
+            // Ideal weight
+            const idealWeight = Math.round(22 * heightM * heightM * 10) / 10;
+
+            const previewContainer = document.getElementById('settingsPreview');
+            previewContainer.innerHTML = `
+                <div class="preview-item">
+                    <div class="value">${bmi.toFixed(1)}</div>
+                    <div class="label">BMI (bei ${weight}kg)</div>
+                </div>
+                <div class="preview-item">
+                    <div class="value">${Math.round(bmr)}</div>
+                    <div class="label">Grundumsatz (kcal)</div>
+                </div>
+                <div class="preview-item">
+                    <div class="value">${Math.round(tdee)}</div>
+                    <div class="label">Tagesbedarf (kcal)</div>
+                </div>
+                <div class="preview-item">
+                    <div class="value">${Math.round(tdee - 500)}</div>
+                    <div class="label">Defizit -500 (kcal)</div>
+                </div>
+                <div class="preview-item">
+                    <div class="value">${protein}g</div>
+                    <div class="label">Protein/Tag</div>
+                </div>
+                <div class="preview-item">
+                    <div class="value">${idealWeight}kg</div>
+                    <div class="label">Idealgewicht</div>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
