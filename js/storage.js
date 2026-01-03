@@ -60,15 +60,98 @@ const DEFAULT_SETTINGS = {
     activity: 'moderate'
 };
 
+// ============ STORAGE ABSTRACTION ============
+
+// Cache for data (used for synchronous access)
+let dataCache = null;
+let settingsCache = null;
+let isElectron = false;
+let storageReady = false;
+
+// Check if running in Electron
+function checkElectron() {
+    isElectron = !!(window.electronStore && window.electronStore.isElectron);
+    return isElectron;
+}
+
+// Initialize storage - loads data from file or localStorage
+async function initStorage() {
+    checkElectron();
+
+    if (isElectron) {
+        // Load from electron-store (file-based)
+        try {
+            dataCache = await window.electronStore.get(STORAGE_KEY);
+            settingsCache = await window.electronStore.get(SETTINGS_KEY);
+
+            // Show storage path in console for user info
+            const storagePath = await window.electronStore.getPath();
+            console.log('📁 Daten gespeichert in:', storagePath);
+        } catch (e) {
+            console.error('Fehler beim Laden der Daten:', e);
+        }
+    } else {
+        // Load from localStorage (browser)
+        const data = localStorage.getItem(STORAGE_KEY);
+        const settings = localStorage.getItem(SETTINGS_KEY);
+        dataCache = data ? JSON.parse(data) : null;
+        settingsCache = settings ? JSON.parse(settings) : null;
+    }
+
+    // Initialize with defaults if needed
+    if (!dataCache) {
+        dataCache = { entries: {}, startWeight: START_WEIGHT, bRotation: 0 };
+    }
+    if (!settingsCache) {
+        settingsCache = { ...DEFAULT_SETTINGS };
+    }
+
+    storageReady = true;
+    return true;
+}
+
 // ============ DATA FUNCTIONS ============
 
 function getData() {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : { entries: {}, startWeight: START_WEIGHT, bRotation: 0 };
+    if (!storageReady) {
+        // Fallback to localStorage if not yet initialized
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : { entries: {}, startWeight: START_WEIGHT, bRotation: 0 };
+    }
+    return dataCache || { entries: {}, startWeight: START_WEIGHT, bRotation: 0 };
 }
 
 function saveData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    // Update cache
+    dataCache = data;
+
+    if (isElectron) {
+        // Save to electron-store (async, but we don't wait)
+        window.electronStore.set(STORAGE_KEY, data);
+    } else {
+        // Save to localStorage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+}
+
+// Settings-specific functions (used by settings.js)
+function getSettingsData() {
+    if (!storageReady) {
+        const settings = localStorage.getItem(SETTINGS_KEY);
+        return settings ? JSON.parse(settings) : { ...DEFAULT_SETTINGS };
+    }
+    return settingsCache || { ...DEFAULT_SETTINGS };
+}
+
+function saveSettingsData(settings) {
+    // Update cache
+    settingsCache = settings;
+
+    if (isElectron) {
+        window.electronStore.set(SETTINGS_KEY, settings);
+    } else {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
 }
 
 // ============ HELPER FUNCTIONS ============
@@ -312,8 +395,14 @@ window.Storage = {
     WORKOUTS,
     ACTIVITY_LEVELS,
     DEFAULT_SETTINGS,
+    // Storage functions
+    initStorage,
     getData,
     saveData,
+    getSettingsData,
+    saveSettingsData,
+    isElectronApp: () => isElectron,
+    // Helper functions
     formatDate,
     parseDate,
     getDayName,

@@ -1,5 +1,32 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const Store = require('electron-store');
+
+// Initialize electron-store
+const store = new Store({
+    name: 'playbook-data',
+    defaults: {
+        'playbook2026': {
+            entries: {},
+            startWeight: 109,
+            bRotation: 0,
+            gamification: {
+                xp: 0,
+                unlockedMedals: {},
+                completedDailyChallenges: {},
+                completedWeeklyChallenges: {},
+                bestStreak: 0,
+                perfectWeeks: 0
+            }
+        },
+        'playbook2026_settings': {
+            height: 183,
+            age: 26,
+            gender: 'male',
+            activity: 'moderate'
+        }
+    }
+});
 
 // Keep a global reference of the window object
 let mainWindow;
@@ -14,7 +41,8 @@ function createWindow() {
         icon: path.join(__dirname, 'icon.png'),
         webPreferences: {
             nodeIntegration: false,
-            contextIsolation: true
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         },
         // Modern look
         backgroundColor: '#0f172a',
@@ -33,6 +61,25 @@ function createWindow() {
         mainWindow = null;
     });
 }
+
+// IPC Handlers for electron-store
+ipcMain.handle('store-get', (event, key) => {
+    return store.get(key);
+});
+
+ipcMain.handle('store-set', (event, key, value) => {
+    store.set(key, value);
+    return true;
+});
+
+ipcMain.handle('store-delete', (event, key) => {
+    store.delete(key);
+    return true;
+});
+
+ipcMain.handle('store-get-path', () => {
+    return store.path;
+});
 
 // This method will be called when Electron has finished initialization
 app.whenReady().then(() => {

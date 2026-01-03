@@ -1,15 +1,12 @@
 // ============ USER SETTINGS ============
 
 function getUserSettings() {
-    const stored = localStorage.getItem(Storage.SETTINGS_KEY);
-    if (stored) {
-        return { ...Storage.DEFAULT_SETTINGS, ...JSON.parse(stored) };
-    }
-    return { ...Storage.DEFAULT_SETTINGS };
+    const stored = Storage.getSettingsData();
+    return { ...Storage.DEFAULT_SETTINGS, ...stored };
 }
 
 function saveUserSettings(settings) {
-    localStorage.setItem(Storage.SETTINGS_KEY, JSON.stringify(settings));
+    Storage.saveSettingsData(settings);
     // Update all displays
     UI.updateDashboard();
     updateScientificGoals();

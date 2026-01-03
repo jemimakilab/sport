@@ -318,12 +318,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize weight form date
     document.getElementById('weightDate').value = Storage.formatDate(new Date());
 
-    // Initialize everything
-    initForm();
-    Settings.initSettings();
-    UI.updateDashboard();
-    Gamification.updateXPDisplay();
-    Gamification.updateAchievements();
-    Charts.initChartTab();
-    scheduleMiddnightRefresh();
+    // Initialize storage (async for Electron file storage)
+    Storage.initStorage().then(() => {
+        // Initialize everything after storage is ready
+        initForm();
+        Settings.initSettings();
+        UI.updateDashboard();
+        Gamification.updateXPDisplay();
+        Gamification.updateAchievements();
+        Charts.initChartTab();
+        scheduleMiddnightRefresh();
+
+        // Show storage info in Electron
+        if (Storage.isElectronApp()) {
+            console.log('🖥️ Läuft als Desktop-App mit Datei-Speicherung');
+        } else {
+            console.log('🌐 Läuft im Browser mit localStorage');
+        }
+    });
 });
