@@ -944,6 +944,117 @@
             font-size: 0.8rem;
             color: var(--gray);
         }
+
+        /* ============ SCIENTIFIC GOALS STYLES ============ */
+        .scientific-goals {
+            padding: 10px 0;
+        }
+
+        .bmi-display {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bmi-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .bmi-category {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .bmi-category.normal { background: rgba(22, 163, 74, 0.2); color: var(--success); }
+        .bmi-category.overweight { background: rgba(234, 88, 12, 0.2); color: var(--warning); }
+        .bmi-category.obese { background: rgba(220, 38, 38, 0.2); color: var(--danger); }
+        .bmi-category.underweight { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+
+        .bmi-bar {
+            position: relative;
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .bmi-zones {
+            display: flex;
+            height: 100%;
+        }
+
+        .bmi-zones .zone {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .zone-under { background: #3b82f6; }
+        .zone-normal { background: #22c55e; }
+        .zone-over { background: #f59e0b; }
+        .zone-obese1 { background: #ef4444; }
+        .zone-obese2 { background: #991b1b; }
+
+        .bmi-marker {
+            position: absolute;
+            top: -2px;
+            width: 4px;
+            height: 28px;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: left 0.5s ease;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .goal-icon {
+            font-size: 1.5rem;
+        }
+
+        .goal-info {
+            flex: 1;
+        }
+
+        .goal-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .goal-label {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        @media (max-width: 500px) {
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1017,6 +1128,57 @@
                     <div class="stat-box">
                         <div class="value" id="weeklyAvg">--</div>
                         <div class="label">Ø 7 Tage</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scientific Goals Card -->
+            <div class="card">
+                <h2>🔬 Wissenschaftliche Ziele</h2>
+                <div class="scientific-goals">
+                    <div class="bmi-display">
+                        <div class="bmi-value" id="currentBMI">--</div>
+                        <div class="bmi-category" id="bmiCategory">--</div>
+                        <div class="bmi-bar">
+                            <div class="bmi-zones">
+                                <span class="zone zone-under">U</span>
+                                <span class="zone zone-normal">N</span>
+                                <span class="zone zone-over">Ü</span>
+                                <span class="zone zone-obese1">A1</span>
+                                <span class="zone zone-obese2">A2</span>
+                            </div>
+                            <div class="bmi-marker" id="bmiMarker"></div>
+                        </div>
+                    </div>
+                    <div class="goals-grid">
+                        <div class="goal-item">
+                            <div class="goal-icon">🥩</div>
+                            <div class="goal-info">
+                                <div class="goal-value" id="proteinGoal">--</div>
+                                <div class="goal-label">Protein/Tag (1,5g/kg)</div>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-icon">🔥</div>
+                            <div class="goal-info">
+                                <div class="goal-value" id="calorieGoal">--</div>
+                                <div class="goal-label">Kalorien (Defizit)</div>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-icon">🎯</div>
+                            <div class="goal-info">
+                                <div class="goal-value" id="nextMilestone">--</div>
+                                <div class="goal-label">Nächstes Ziel</div>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-icon">⚖️</div>
+                            <div class="goal-info">
+                                <div class="goal-value" id="idealWeight">--</div>
+                                <div class="goal-label">Idealgewicht (BMI 22)</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1383,6 +1545,109 @@
         const START_WEIGHT = 109;
         const GOAL_WEIGHT = 89.9;
         const GOAL_DATE = new Date('2026-12-23');
+        const USER_HEIGHT = 1.83; // Körpergröße in Metern
+
+        // ============ SCIENTIFIC CALCULATIONS ============
+        /**
+         * Berechnet wissenschaftliche Ziele basierend auf aktuellem Gewicht
+         * @param {number} weight - Aktuelles Gewicht in kg
+         * @returns {Object} Wissenschaftliche Zielwerte
+         */
+        function calculateScientificGoals(weight) {
+            if (!weight) return null;
+
+            // BMI Berechnung: Gewicht / (Größe²)
+            const bmi = weight / (USER_HEIGHT * USER_HEIGHT);
+
+            // BMI Kategorie nach WHO
+            let category, categoryClass;
+            if (bmi < 18.5) {
+                category = 'Untergewicht';
+                categoryClass = 'underweight';
+            } else if (bmi < 25) {
+                category = 'Normalgewicht';
+                categoryClass = 'normal';
+            } else if (bmi < 30) {
+                category = 'Übergewicht';
+                categoryClass = 'overweight';
+            } else if (bmi < 35) {
+                category = 'Adipositas Grad I';
+                categoryClass = 'obese';
+            } else if (bmi < 40) {
+                category = 'Adipositas Grad II';
+                categoryClass = 'obese';
+            } else {
+                category = 'Adipositas Grad III';
+                categoryClass = 'obese';
+            }
+
+            // Protein: 1,5g pro kg Körpergewicht (für Muskelerhalt bei Defizit)
+            const proteinGoal = Math.round(weight * 1.5);
+
+            // Kalorien: Grundumsatz nach Mifflin-St Jeor + Aktivität - Defizit
+            // Annahme: Mann, 30 Jahre, moderat aktiv
+            const bmr = 10 * weight + 6.25 * (USER_HEIGHT * 100) - 5 * 30 + 5;
+            const tdee = bmr * 1.55; // Moderat aktiv
+            const calorieGoal = Math.round(tdee - 500); // 500 kcal Defizit
+
+            // Idealgewicht bei BMI 22
+            const idealWeight = Math.round(22 * USER_HEIGHT * USER_HEIGHT * 10) / 10;
+
+            // Nächstes Meilenstein-Gewicht (5kg Schritte)
+            const nextMilestone = Math.floor(weight / 5) * 5;
+
+            // BMI-Marker Position (für Visualisierung)
+            // BMI Range: 15-40 mapped to 0-100%
+            const bmiPosition = Math.max(0, Math.min(100, ((bmi - 15) / 25) * 100));
+
+            return {
+                bmi: bmi.toFixed(1),
+                category,
+                categoryClass,
+                proteinGoal,
+                calorieGoal,
+                idealWeight,
+                nextMilestone: nextMilestone < weight ? nextMilestone : weight - 2,
+                bmiPosition
+            };
+        }
+
+        /**
+         * Aktualisiert die Anzeige der wissenschaftlichen Ziele
+         */
+        function updateScientificGoals() {
+            const latestWeight = getLatestWeight();
+            const goals = calculateScientificGoals(latestWeight);
+
+            if (!goals) {
+                document.getElementById('currentBMI').textContent = '--';
+                document.getElementById('bmiCategory').textContent = 'Gewicht eintragen';
+                document.getElementById('bmiCategory').className = 'bmi-category';
+                document.getElementById('proteinGoal').textContent = '--';
+                document.getElementById('calorieGoal').textContent = '--';
+                document.getElementById('nextMilestone').textContent = '--';
+                document.getElementById('idealWeight').textContent = '--';
+                return;
+            }
+
+            document.getElementById('currentBMI').textContent = `BMI ${goals.bmi}`;
+            document.getElementById('bmiCategory').textContent = goals.category;
+            document.getElementById('bmiCategory').className = `bmi-category ${goals.categoryClass}`;
+            document.getElementById('proteinGoal').textContent = `${goals.proteinGoal}g`;
+            document.getElementById('calorieGoal').textContent = `${goals.calorieGoal} kcal`;
+            document.getElementById('nextMilestone').textContent = `${goals.nextMilestone} kg`;
+            document.getElementById('idealWeight').textContent = `${goals.idealWeight} kg`;
+            document.getElementById('bmiMarker').style.left = `${goals.bmiPosition}%`;
+        }
+
+        /**
+         * Gibt das dynamische Proteinziel zurück
+         * @returns {number} Proteinziel in Gramm
+         */
+        function getDynamicProteinGoal() {
+            const weight = getLatestWeight();
+            return weight ? Math.round(weight * 1.5) : 180; // Fallback auf 180g
+        }
 
         // Start date: use first entry date or Jan 1, 2026 (whichever applies)
         function getStartDate() {
@@ -1479,8 +1744,8 @@
             { id: 'weight_goal', icon: '🏁', name: 'Ziel erreicht!', desc: 'Unter 90 kg', xp: 1000, check: (stats) => stats.currentWeight && stats.currentWeight < 90 },
 
             // Protein Medals
-            { id: 'protein_7', icon: '🥩', name: 'Protein-Pro', desc: '7 Tage 180g+ Protein', xp: 75, check: (stats) => stats.proteinStreak >= 7 },
-            { id: 'protein_30', icon: '🍗', name: 'Protein-Meister', desc: '30 Tage 180g+ Protein', xp: 200, check: (stats) => stats.proteinStreak >= 30 },
+            { id: 'protein_7', icon: '🥩', name: 'Protein-Pro', desc: '7 Tage Protein-Ziel erreicht', xp: 75, check: (stats) => stats.proteinStreak >= 7 },
+            { id: 'protein_30', icon: '🍗', name: 'Protein-Meister', desc: '30 Tage Protein-Ziel erreicht', xp: 200, check: (stats) => stats.proteinStreak >= 30 },
 
             // IF Medals
             { id: 'if_14', icon: '⏰', name: 'IF-Anfänger', desc: '14 Tage IF eingehalten', xp: 50, check: (stats) => stats.ifStreak >= 14 },
@@ -1501,19 +1766,19 @@
             { id: 'quarter_q4', icon: '❄️', name: 'Q4 Sieger', desc: 'Q4 Ziel erreicht', xp: 500, check: (stats) => stats.q4Reached }
         ];
 
-        // Daily Challenges (rotate based on day)
+        // Daily Challenges (rotate based on day) - mit dynamischen Zielen
         const DAILY_CHALLENGES = [
             { id: 'train_today', icon: '💪', name: 'Training absolvieren', desc: 'Schließe dein heutiges Training ab', xp: 20, check: (todayEntry) => todayEntry?.training },
-            { id: 'protein_180', icon: '🥩', name: 'Protein-Ziel', desc: 'Erreiche 180g Protein', xp: 15, check: (todayEntry) => todayEntry?.protein >= 180 },
+            { id: 'protein_dynamic', icon: '🥩', name: 'Protein-Ziel', getDesc: () => `Erreiche ${getDynamicProteinGoal()}g Protein`, xp: 15, check: (todayEntry) => todayEntry?.protein >= getDynamicProteinGoal() },
             { id: 'if_today', icon: '⏰', name: 'IF einhalten', desc: 'Halte das 12-20 Uhr Fenster ein', xp: 10, check: (todayEntry) => todayEntry?.if },
-            { id: 'calorie_zone', icon: '🎯', name: 'Kalorien-Zone', desc: 'Bleib zwischen 2100-2400 kcal', xp: 15, check: (todayEntry) => todayEntry?.calories >= 2100 && todayEntry?.calories <= 2400 },
+            { id: 'calorie_dynamic', icon: '🎯', name: 'Kalorien-Zone', getDesc: () => { const g = calculateScientificGoals(getLatestWeight()); return g ? `Bleib bei ~${g.calorieGoal} kcal` : 'Kalorien im Defizit'; }, xp: 15, check: (todayEntry) => { const g = calculateScientificGoals(getLatestWeight()); return g && todayEntry?.calories >= (g.calorieGoal - 200) && todayEntry?.calories <= (g.calorieGoal + 200); } },
             { id: 'log_weight', icon: '⚖️', name: 'Wiegen', desc: 'Trage dein Gewicht ein', xp: 5, check: (todayEntry) => todayEntry?.weight }
         ];
 
         // Weekly Challenges (rotate based on week number)
         const WEEKLY_CHALLENGES = [
             { id: 'perfect_week', icon: '🏆', name: 'Perfekte Woche', desc: '6/6 Trainings diese Woche', xp: 150, target: 6, getProgress: (stats) => stats.weekTrainings },
-            { id: 'protein_week', icon: '🥩', name: 'Protein-Woche', desc: '5 Tage mit 180g+ Protein', xp: 100, target: 5, getProgress: (stats) => stats.weekProteinDays },
+            { id: 'protein_week', icon: '🥩', name: 'Protein-Woche', desc: '5 Tage Protein-Ziel erreicht', xp: 100, target: 5, getProgress: (stats) => stats.weekProteinDays },
             { id: 'if_week', icon: '⏰', name: 'IF-Woche', desc: '6 Tage IF eingehalten', xp: 75, target: 6, getProgress: (stats) => stats.weekIFDays },
             { id: 'weight_down', icon: '📉', name: 'Abwärtstrend', desc: 'Gewicht diese Woche reduzieren', xp: 100, target: 1, getProgress: (stats) => stats.weekWeightDown ? 1 : 0 }
         ];
@@ -1852,7 +2117,7 @@
                 if (entry.weight) stats.currentWeight = entry.weight;
 
                 // Protein streak
-                if (entry.protein >= 180) {
+                if (entry.protein >= getDynamicProteinGoal()) {
                     currentProteinStreak++;
                     stats.proteinStreak = Math.max(stats.proteinStreak, currentProteinStreak);
                 } else {
@@ -1870,7 +2135,7 @@
                 // This week stats
                 if (entryDate >= weekStart) {
                     if (entry.training) stats.weekTrainings++;
-                    if (entry.protein >= 180) stats.weekProteinDays++;
+                    if (entry.protein >= getDynamicProteinGoal()) stats.weekProteinDays++;
                     if (entry.if) stats.weekIFDays++;
                     if (entry.weight) {
                         if (!firstWeekWeight) firstWeekWeight = entry.weight;
@@ -2020,7 +2285,7 @@
                             </div>
                             <span class="challenge-reward">${alreadyClaimed ? '✓' : `+${challenge.xp} XP`}</span>
                         </div>
-                        <div class="challenge-status">${challenge.desc}</div>
+                        <div class="challenge-status">${challenge.getDesc ? challenge.getDesc() : challenge.desc}</div>
                         <div class="challenge-progress">
                             <div class="challenge-progress-bar">
                                 <div class="challenge-progress-fill" style="width: ${completed ? 100 : 0}%"></div>
@@ -2473,6 +2738,9 @@
 
             // Quarter goals
             updateQuarterGoals(latestWeight);
+
+            // Scientific goals (BMI, Protein, etc.)
+            updateScientificGoals();
         }
 
         function updateQuarterGoals(currentWeight) {
@@ -2574,7 +2842,7 @@
             const calorieEl = document.getElementById('calorieStatus');
 
             if (entry.protein) {
-                const proteinOk = entry.protein >= 180;
+                const proteinOk = entry.protein >= getDynamicProteinGoal();
                 proteinEl.textContent = `${entry.protein}g`;
                 proteinEl.style.color = proteinOk ? 'var(--success)' : 'var(--warning)';
             } else {
