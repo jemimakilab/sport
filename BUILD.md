@@ -41,6 +41,17 @@ dist/
 
 ## Hinweise
 
-- Die App speichert Daten in: `%APPDATA%/playbook-2026/`
+- **Daten werden gespeichert in:** `%APPDATA%/playbook-2026/playbook-data.json`
+- Daten bleiben auch nach App-Neuinstallation erhalten!
+- Du kannst die JSON-Datei als Backup kopieren
 - Erste Build dauert länger (Electron wird heruntergeladen)
 - Installer erstellt Desktop-Verknüpfung
+
+## Backup & Restore
+
+Deine Daten findest du hier:
+```
+%APPDATA%/playbook-2026/playbook-data.json
+```
+
+Diese Datei enthält alle Einträge, Einstellungen und Achievements.
