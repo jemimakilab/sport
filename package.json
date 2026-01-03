@@ -1,0 +1,43 @@
+{
+  "name": "playbook-2026",
+  "productName": "Playbook 2026",
+  "version": "1.0.0",
+  "description": "Fitness Tracker - Dein Weg zu 89.9 kg",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build:all": "electron-builder --win --mac --linux"
+  },
+  "keywords": ["fitness", "tracker", "weight-loss"],
+  "author": "Playbook 2026",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.playbook2026.app",
+    "productName": "Playbook 2026",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "css/**/*",
+      "js/**/*",
+      "icon.png"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
