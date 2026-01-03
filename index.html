@@ -2686,8 +2686,8 @@
                 gamData.bestStreak = stats.currentStreak;
             }
 
-            // Current level
-            stats.currentLevel = getCurrentLevel(gamData.totalXP || 0);
+            // Current level (extract .level from returned object)
+            stats.currentLevel = getCurrentLevel(gamData.xp || 0).level;
 
             // Quarter goals
             const today = new Date();
@@ -2726,14 +2726,6 @@
             const bWorkouts = ['B1', 'B2', 'B3'];
             const bCount = Math.floor(dayCount / 2);
             return bWorkouts[bCount % 3];
-        }
-
-        function getCurrentLevel(totalXP) {
-            let level = 1;
-            for (const lvl of LEVELS) {
-                if (totalXP >= lvl.xpNeeded) level = lvl.level;
-            }
-            return level;
         }
 
         function getWeekStart(date) {
