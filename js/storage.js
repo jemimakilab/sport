@@ -270,33 +270,34 @@ function advanceBRotation() {
 function calculateStreak() {
     const data = getData();
     const entries = data.entries;
-    const sortedDates = Object.keys(entries).sort().reverse();
 
     let streak = 0;
     let checkDate = new Date();
     checkDate.setHours(0, 0, 0, 0);
 
-    const todayStr = formatDate(checkDate);
-    if (entries[todayStr]?.training) {
-        streak = 1;
-        checkDate.setDate(checkDate.getDate() - 1);
-    }
-
+    // Check from today backwards
     while (true) {
         const dateStr = formatDate(checkDate);
         const entry = entries[dateStr];
+        const isSaturday = checkDate.getDay() === 6;
 
-        if (checkDate.getDay() === 6) {
+        if (isSaturday) {
+            // Saturday (Cheat Day) - training is optional
+            // Count it if done, but don't break streak if not
+            if (entry?.training) {
+                streak++;
+            }
+            // Move to previous day regardless
             checkDate.setDate(checkDate.getDate() - 1);
             continue;
         }
 
+        // Non-Saturday: training required to continue streak
         if (entry?.training) {
             streak++;
             checkDate.setDate(checkDate.getDate() - 1);
-        } else if (entry) {
-            break;
         } else {
+            // No training on non-Saturday = streak ends
             break;
         }
     }
