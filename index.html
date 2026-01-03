@@ -2129,7 +2129,52 @@
             { id: 'quarter_q1', icon: '🎯', name: 'Q1 Sieger', desc: 'Q1 Ziel erreicht', xp: 300, check: (stats) => stats.q1Reached },
             { id: 'quarter_q2', icon: '☀️', name: 'Q2 Sieger', desc: 'Q2 Ziel erreicht', xp: 300, check: (stats) => stats.q2Reached },
             { id: 'quarter_q3', icon: '🍂', name: 'Q3 Sieger', desc: 'Q3 Ziel erreicht', xp: 300, check: (stats) => stats.q3Reached },
-            { id: 'quarter_q4', icon: '❄️', name: 'Q4 Sieger', desc: 'Q4 Ziel erreicht', xp: 500, check: (stats) => stats.q4Reached }
+            { id: 'quarter_q4', icon: '❄️', name: 'Q4 Sieger', desc: 'Q4 Ziel erreicht', xp: 500, check: (stats) => stats.q4Reached },
+
+            // === NEUE MEDAILLEN ===
+
+            // Konsistenz / Logging
+            { id: 'log_7', icon: '🗓️', name: 'Woche geschafft', desc: '7 Tage am Stück geloggt', xp: 25, check: (stats) => stats.logStreak >= 7 },
+            { id: 'log_60', icon: '📆', name: '2 Monate dabei', desc: '60 Tage geloggt', xp: 150, check: (stats) => stats.totalEntries >= 60 },
+            { id: 'log_90', icon: '🗓️', name: 'Quartal-Logger', desc: '90 Tage geloggt', xp: 250, check: (stats) => stats.totalEntries >= 90 },
+            { id: 'log_365', icon: '📅', name: 'Jahres-Veteran', desc: '365 Tage geloggt', xp: 1000, check: (stats) => stats.totalEntries >= 365 },
+
+            // BMI-Meilensteine
+            { id: 'bmi_under30', icon: '📊', name: 'Adipositas ade', desc: 'BMI unter 30', xp: 300, check: (stats) => stats.currentBMI && stats.currentBMI < 30 },
+            { id: 'bmi_under25', icon: '🎯', name: 'Übergewicht-Exit', desc: 'BMI unter 25', xp: 500, check: (stats) => stats.currentBMI && stats.currentBMI < 25 },
+            { id: 'bmi_normal', icon: '✨', name: 'Normalgewicht', desc: 'BMI im Normalbereich (18.5-25)', xp: 750, check: (stats) => stats.currentBMI && stats.currentBMI >= 18.5 && stats.currentBMI < 25 },
+
+            // Workout-Vielfalt
+            { id: 'allrounder', icon: '🔄', name: 'Allrounder', desc: 'Alle 3 B-Workouts in einer Woche', xp: 50, check: (stats) => stats.weeklyAllBWorkouts },
+            { id: 'runner_20', icon: '🏃', name: 'Läufer-Herz', desc: '20 Tag-A Trainings', xp: 100, check: (stats) => stats.totalADays >= 20 },
+            { id: 'push_15', icon: '💪', name: 'Push-Master', desc: '15 B1-Workouts', xp: 75, check: (stats) => stats.totalB1Days >= 15 },
+            { id: 'pull_15', icon: '🏋️', name: 'Pull-Master', desc: '15 B2-Workouts', xp: 75, check: (stats) => stats.totalB2Days >= 15 },
+            { id: 'legs_15', icon: '🦵', name: 'Leg-Master', desc: '15 B3-Workouts', xp: 75, check: (stats) => stats.totalB3Days >= 15 },
+
+            // Kalorien-Disziplin
+            { id: 'cal_7', icon: '🎯', name: 'Kalorien-Rookie', desc: '7 Tage im Zielbereich', xp: 50, check: (stats) => stats.calorieStreak >= 7 },
+            { id: 'cal_30', icon: '🎯', name: 'Kalorien-Pro', desc: '30 Tage im Zielbereich', xp: 150, check: (stats) => stats.calorieStreak >= 30 },
+
+            // Perfekte Tage
+            { id: 'perfect_day_1', icon: '⭐', name: 'Perfekter Tag', desc: 'Training + Protein + IF + Kalorien', xp: 30, check: (stats) => stats.perfectDays >= 1 },
+            { id: 'perfect_day_5', icon: '🌟', name: '5 Perfekte Tage', desc: '5x alles geschafft', xp: 100, check: (stats) => stats.perfectDays >= 5 },
+            { id: 'perfect_day_20', icon: '💎', name: '20 Perfekte Tage', desc: '20x alles geschafft', xp: 300, check: (stats) => stats.perfectDays >= 20 },
+            { id: 'perfect_day_50', icon: '👑', name: '50 Perfekte Tage', desc: '50x alles geschafft', xp: 500, check: (stats) => stats.perfectDays >= 50 },
+
+            // Level-Erfolge
+            { id: 'level_5', icon: '🎮', name: 'Level 5', desc: 'Level 5 erreicht', xp: 50, check: (stats) => stats.currentLevel >= 5 },
+            { id: 'level_10', icon: '🎮', name: 'Level 10', desc: 'Level 10 erreicht', xp: 150, check: (stats) => stats.currentLevel >= 10 },
+            { id: 'level_max', icon: '👑', name: 'Max Level', desc: 'Level 13 erreicht', xp: 500, check: (stats) => stats.currentLevel >= 13 },
+
+            // Speed-Erfolge
+            { id: 'speed_1kg', icon: '⚡', name: 'Schnellstart', desc: '1kg in einer Woche verloren', xp: 75, check: (stats) => stats.weeklyWeightLoss >= 1 },
+            { id: 'speed_3kg', icon: '🚀', name: 'Turbo-Monat', desc: '3kg in einem Monat verloren', xp: 200, check: (stats) => stats.monthlyWeightLoss >= 3 },
+
+            // Spezial
+            { id: 'comeback', icon: '🦸', name: 'Comeback-Kid', desc: 'Nach 3+ Tagen Pause zurück', xp: 50, check: (stats) => stats.hadComeback },
+            { id: 'no_cheat', icon: '🧘', name: 'Cheat-Verzicht', desc: 'Monat ohne Cheat Day', xp: 200, check: (stats) => stats.monthWithoutCheat },
+            { id: 'sunday_warrior', icon: '🌅', name: 'Sonntagskrieger', desc: 'Training am Sonntag', xp: 25, check: (stats) => stats.sundayTraining },
+            { id: 'weight_20', icon: '🏆', name: 'Mega-Transformation', desc: '20 kg verloren', xp: 750, check: (stats) => stats.weightLost >= 20 }
         ];
 
         // Daily Challenges (rotate based on day) - mit dynamischen Zielen
@@ -2447,8 +2492,12 @@
             const data = getData();
             const entries = data.entries;
             const sortedDates = Object.keys(entries).sort();
+            const settings = getUserSettings();
+            const heightM = settings.height / 100;
+            const gamData = getGamificationData();
 
             let stats = {
+                // Basis
                 totalTrainings: 0,
                 totalEntries: sortedDates.length,
                 weightLost: 0,
@@ -2457,7 +2506,7 @@
                 currentStreak: calculateStreak(),
                 proteinStreak: 0,
                 ifStreak: 0,
-                perfectWeeks: 0,
+                perfectWeeks: gamData.perfectWeeks || 0,
                 weekTrainings: 0,
                 weekProteinDays: 0,
                 weekIFDays: 0,
@@ -2465,22 +2514,99 @@
                 q1Reached: false,
                 q2Reached: false,
                 q3Reached: false,
-                q4Reached: false
+                q4Reached: false,
+
+                // NEUE STATS
+                logStreak: 0,
+                currentBMI: null,
+                totalADays: 0,
+                totalB1Days: 0,
+                totalB2Days: 0,
+                totalB3Days: 0,
+                weeklyAllBWorkouts: false,
+                calorieStreak: 0,
+                perfectDays: 0,
+                currentLevel: 1,
+                weeklyWeightLoss: 0,
+                monthlyWeightLoss: 0,
+                hadComeback: gamData.hadComeback || false,
+                monthWithoutCheat: false,
+                sundayTraining: gamData.sundayTraining || false
             };
 
-            // Calculate totals
+            // Tracking variables
             let currentProteinStreak = 0;
             let currentIFStreak = 0;
+            let currentLogStreak = 0;
+            let currentCalorieStreak = 0;
+            let lastEntryDate = null;
             let weekStart = getWeekStart(new Date());
+            let monthStart = getMonthStart(new Date());
             let firstWeekWeight = null;
             let lastWeekWeight = null;
+            let firstMonthWeight = null;
+            let lastMonthWeight = null;
+            let weekB1 = false, weekB2 = false, weekB3 = false;
+            let monthCheatDays = 0;
+            let gapDays = 0;
 
             for (const dateStr of sortedDates) {
                 const entry = entries[dateStr];
                 const entryDate = parseDate(dateStr);
+                const dayOfWeek = entryDate.getDay();
 
-                if (entry.training) stats.totalTrainings++;
+                // Logging streak
+                if (lastEntryDate) {
+                    const daysDiff = Math.floor((entryDate - lastEntryDate) / (1000 * 60 * 60 * 24));
+                    if (daysDiff === 1) {
+                        currentLogStreak++;
+                    } else if (daysDiff > 1) {
+                        gapDays = daysDiff - 1;
+                        if (gapDays >= 3 && !stats.hadComeback) {
+                            stats.hadComeback = true;
+                            gamData.hadComeback = true;
+                        }
+                        currentLogStreak = 1;
+                    }
+                } else {
+                    currentLogStreak = 1;
+                }
+                stats.logStreak = Math.max(stats.logStreak, currentLogStreak);
+                lastEntryDate = entryDate;
+
+                // Training counts
+                if (entry.training) {
+                    stats.totalTrainings++;
+
+                    // Sunday training
+                    if (dayOfWeek === 0) {
+                        stats.sundayTraining = true;
+                        gamData.sundayTraining = true;
+                    }
+
+                    // Workout type tracking (based on date pattern)
+                    const workoutType = getWorkoutTypeForDate(entryDate);
+                    if (workoutType === 'A') stats.totalADays++;
+                    else if (workoutType === 'B1') stats.totalB1Days++;
+                    else if (workoutType === 'B2') stats.totalB2Days++;
+                    else if (workoutType === 'B3') stats.totalB3Days++;
+                }
+
+                // Weight
                 if (entry.weight) stats.currentWeight = entry.weight;
+
+                // Cheat day tracking
+                if (entry.cheat) monthCheatDays++;
+
+                // Calorie goal check
+                const calorieGoal = calculateScientificGoals(stats.currentWeight || 100)?.calorieGoal || 2100;
+                const calorieInRange = entry.calories && entry.calories >= (calorieGoal - 200) && entry.calories <= (calorieGoal + 200);
+                if (calorieInRange) {
+                    currentCalorieStreak++;
+                    stats.calorieStreak = Math.max(stats.calorieStreak, currentCalorieStreak);
+                } else if (entry.calories) {
+                    currentCalorieStreak = 0;
+                }
 
                 // Protein streak
                 if (entry.protein >= getDynamicProteinGoal()) {
@@ -2498,40 +2624,70 @@
                     currentIFStreak = 0;
                 }
 
+                // Perfect day check
+                const proteinOk = entry.protein >= getDynamicProteinGoal();
+                const isPerfectDay = entry.training && proteinOk && entry.if && calorieInRange;
+                if (isPerfectDay) stats.perfectDays++;
+
                 // This week stats
                 if (entryDate >= weekStart) {
-                    if (entry.training) stats.weekTrainings++;
-                    if (entry.protein >= getDynamicProteinGoal()) stats.weekProteinDays++;
+                    if (entry.training) {
+                        stats.weekTrainings++;
+                        const workoutType = getWorkoutTypeForDate(entryDate);
+                        if (workoutType === 'B1') weekB1 = true;
+                        if (workoutType === 'B2') weekB2 = true;
+                        if (workoutType === 'B3') weekB3 = true;
+                    }
+                    if (proteinOk) stats.weekProteinDays++;
                     if (entry.if) stats.weekIFDays++;
                     if (entry.weight) {
                         if (!firstWeekWeight) firstWeekWeight = entry.weight;
                         lastWeekWeight = entry.weight;
                     }
                 }
+
+                // This month stats
+                if (entryDate >= monthStart) {
+                    if (entry.weight) {
+                        if (!firstMonthWeight) firstMonthWeight = entry.weight;
+                        lastMonthWeight = entry.weight;
+                    }
+                }
             }
 
-            // Weight loss
+            // Weekly all B workouts
+            stats.weeklyAllBWorkouts = weekB1 && weekB2 && weekB3;
+
+            // Weight loss calculations
             if (stats.currentWeight) {
                 stats.weightLost = START_WEIGHT - stats.currentWeight;
+                stats.currentBMI = stats.currentWeight / (heightM * heightM);
             }
 
-            // Week weight down
-            if (firstWeekWeight && lastWeekWeight && lastWeekWeight < firstWeekWeight) {
-                stats.weekWeightDown = true;
+            // Week weight change
+            if (firstWeekWeight && lastWeekWeight) {
+                stats.weeklyWeightLoss = firstWeekWeight - lastWeekWeight;
+                if (lastWeekWeight < firstWeekWeight) {
+                    stats.weekWeightDown = true;
+                }
             }
 
-            // Best streak (use gamification data or current)
-            const gamData = getGamificationData();
+            // Month weight change
+            if (firstMonthWeight && lastMonthWeight) {
+                stats.monthlyWeightLoss = firstMonthWeight - lastMonthWeight;
+            }
+
+            // Month without cheat day
+            stats.monthWithoutCheat = monthCheatDays === 0 && sortedDates.some(d => parseDate(d) >= monthStart);
+
+            // Best streak
             stats.bestStreak = Math.max(gamData.bestStreak || 0, stats.currentStreak);
-
-            // Update best streak if needed
             if (stats.currentStreak > (gamData.bestStreak || 0)) {
                 gamData.bestStreak = stats.currentStreak;
-                saveGamificationData(gamData);
             }
 
-            // Perfect weeks
-            stats.perfectWeeks = gamData.perfectWeeks || 0;
+            // Current level
+            stats.currentLevel = getCurrentLevel(gamData.totalXP || 0);
 
             // Quarter goals
             const today = new Date();
@@ -2542,7 +2698,42 @@
                 if (today >= new Date('2026-12-23') && stats.currentWeight <= 89.9) stats.q4Reached = true;
             }
 
+            // Save updated gamification data
+            saveGamificationData(gamData);
+
             return stats;
+        }
+
+        function getMonthStart(date) {
+            const d = new Date(date);
+            d.setDate(1);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        function getWorkoutTypeForDate(date) {
+            const startDate = new Date('2026-01-01');
+            if (date.getDay() === 6) return 'CHEAT'; // Saturday
+
+            let dayCount = 0;
+            for (let d = new Date(startDate); d <= date; d.setDate(d.getDate() + 1)) {
+                if (d.getDay() !== 6) dayCount++;
+            }
+
+            const isADay = dayCount % 2 === 1;
+            if (isADay) return 'A';
+
+            const bWorkouts = ['B1', 'B2', 'B3'];
+            const bCount = Math.floor(dayCount / 2);
+            return bWorkouts[bCount % 3];
+        }
+
+        function getCurrentLevel(totalXP) {
+            let level = 1;
+            for (const lvl of LEVELS) {
+                if (totalXP >= lvl.xpNeeded) level = lvl.level;
+            }
+            return level;
         }
 
         function getWeekStart(date) {
