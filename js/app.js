@@ -10,14 +10,21 @@ const UI = {
 
         // Progress
         if (latestWeight) {
+            const targetWeight = Settings.getTargetWeight();
             document.getElementById('currentWeight').textContent = `${latestWeight} kg`;
             const lost = (Storage.START_WEIGHT - latestWeight).toFixed(1);
-            const toGo = (latestWeight - Storage.GOAL_WEIGHT).toFixed(1);
-            const progress = ((Storage.START_WEIGHT - latestWeight) / (Storage.START_WEIGHT - Storage.GOAL_WEIGHT)) * 100;
+            const toGo = (latestWeight - targetWeight).toFixed(1);
+            const progress = ((Storage.START_WEIGHT - latestWeight) / (Storage.START_WEIGHT - targetWeight)) * 100;
 
             document.getElementById('weightLost').textContent = lost;
             document.getElementById('weightToGo').textContent = toGo;
             document.getElementById('progressFill').style.width = `${Math.min(100, Math.max(0, progress))}%`;
+            
+            // Update goal display in header
+            const goalElement = document.querySelector('.subtitle');
+            if (goalElement && goalElement.textContent.includes('Ziel:')) {
+                goalElement.textContent = `Ziel: ${targetWeight} kg bis 23. Dezember 2026`;
+            }
         }
 
         // Days left and current date display
@@ -64,15 +71,18 @@ const UI = {
     updateQuarterGoals: function(currentWeight) {
         const container = document.getElementById('quarterGoals');
         const today = new Date();
+        
+        // Get dynamic quarter goals based on current target weight
+        const quarterGoals = Settings.updateQuarterGoals();
 
-        container.innerHTML = Storage.QUARTER_GOALS.map((q, idx) => {
+        container.innerHTML = quarterGoals.map((q, idx) => {
             let status = 'future';
             let icon = '⏳';
 
             if (today > q.date) {
                 status = currentWeight && currentWeight <= q.target ? 'achieved' : 'future';
                 icon = currentWeight && currentWeight <= q.target ? '✅' : '❌';
-            } else if (today <= q.date && (idx === 0 || today > Storage.QUARTER_GOALS[idx - 1]?.date)) {
+            } else if (today <= q.date && (idx === 0 || today > quarterGoals[idx - 1]?.date)) {
                 status = 'current';
                 icon = '🎯';
             }
@@ -80,10 +90,16 @@ const UI = {
             return `
                 <div class="quarter-item ${status}">
                     <span>${icon} ${q.label}</span>
-                    <span>${q.target} kg</span>
+                    <span>${q.target.toFixed(1)} kg</span>
                 </div>
             `;
         }).join('');
+    },
+
+    updateQuarterGoalsDisplay: function(quarterGoals) {
+        // This function can be called from settings.js to update the display
+        const currentWeight = Storage.getLatestWeight();
+        this.updateQuarterGoals(currentWeight);
     },
 
     updateHistory: function() {

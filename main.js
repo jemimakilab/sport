@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
+const { autoUpdater } = require('electron-updater');
 
 // Initialize electron-store
 const store = new Store({
@@ -81,9 +82,24 @@ ipcMain.handle('store-get-path', () => {
     return store.path;
 });
 
+// Auto-updater events
+autoUpdater.checkForUpdatesAndNotify();
+
+autoUpdater.on('update-available', () => {
+    console.log('Update available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+    console.log('Update downloaded');
+    autoUpdater.quitAndInstall();
+});
+
 // This method will be called when Electron has finished initialization
 app.whenReady().then(() => {
     createWindow();
+
+    // Check for updates after window is ready
+    autoUpdater.checkForUpdatesAndNotify();
 
     app.on('activate', () => {
         // On macOS re-create window when dock icon is clicked

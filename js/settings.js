@@ -122,6 +122,22 @@ function getDynamicProteinGoal() {
 function initSettings() {
     const settings = getUserSettings();
 
+    // Target Weight slider
+    const targetSlider = document.getElementById('settingTargetWeight');
+    const targetValue = document.getElementById('targetWeightValue');
+    targetSlider.value = settings.targetWeight || 89.9;
+    targetValue.textContent = `${settings.targetWeight || 89.9} kg`;
+
+    targetSlider.addEventListener('input', (e) => {
+        const value = parseFloat(e.target.value);
+        targetValue.textContent = `${value} kg`;
+        const newSettings = getUserSettings();
+        newSettings.targetWeight = value;
+        saveUserSettings(newSettings);
+        updateQuarterGoals(); // Update quarter goals when target changes
+        updateProgressBar(); // Update progress when target changes
+    });
+
     // Height slider
     const heightSlider = document.getElementById('settingHeight');
     const heightValue = document.getElementById('heightValue');
@@ -188,6 +204,54 @@ function initSettings() {
     updateSettingsPreview();
 }
 
+function getTargetWeight() {
+    const settings = getUserSettings();
+    return settings.targetWeight || 89.9;
+}
+
+function updateQuarterGoals() {
+    const targetWeight = getTargetWeight();
+    const startWeight = Storage.START_WEIGHT;
+    const totalLoss = startWeight - targetWeight;
+    
+    // Recalculate quarter goals based on new target
+    const newQuarterGoals = [
+        { label: 'Q1 (31. März)', target: startWeight - (totalLoss * 0.25), date: new Date('2026-03-31') },
+        { label: 'Q2 (30. Juni)', target: startWeight - (totalLoss * 0.50), date: new Date('2026-06-30') },
+        { label: 'Q3 (30. Sept)', target: startWeight - (totalLoss * 0.75), date: new Date('2026-09-30') },
+        { label: 'Q4 (23. Dez)', target: targetWeight, date: new Date('2026-12-23') }
+    ];
+    
+    // Update the display if quarter goals are visible
+    if (window.UI && window.UI.updateQuarterGoalsDisplay) {
+        window.UI.updateQuarterGoalsDisplay(newQuarterGoals);
+    }
+    
+    return newQuarterGoals;
+}
+
+function updateProgressBar() {
+    const currentWeight = Storage.getLatestWeight();
+    const targetWeight = getTargetWeight();
+    const startWeight = Storage.START_WEIGHT;
+    
+    if (currentWeight) {
+        const progress = ((startWeight - currentWeight) / (startWeight - targetWeight)) * 100;
+        const progressElement = document.getElementById('progressFill');
+        if (progressElement) {
+            progressElement.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+        }
+        
+        // Update goal display
+        const goalElements = document.querySelectorAll('.subtitle');
+        goalElements.forEach(el => {
+            if (el.textContent.includes('89,9 kg')) {
+                el.textContent = `Ziel: ${targetWeight} kg bis 23. Dezember 2026`;
+            }
+        });
+    }
+}
+
 function updateSettingsPreview() {
     const settings = getUserSettings();
     const weight = Storage.getLatestWeight() || 100;
@@ -249,5 +313,8 @@ window.Settings = {
     updateScientificGoals,
     getDynamicProteinGoal,
     initSettings,
-    updateSettingsPreview
+    updateSettingsPreview,
+    getTargetWeight,
+    updateQuarterGoals,
+    updateProgressBar
 };

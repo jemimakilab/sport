@@ -57,7 +57,8 @@ const DEFAULT_SETTINGS = {
     height: 183,
     age: 26,
     gender: 'male',
-    activity: 'moderate'
+    activity: 'moderate',
+    targetWeight: 89.9
 };
 
 // ============ STORAGE ABSTRACTION ============
@@ -140,7 +141,10 @@ function getSettingsData() {
         const settings = localStorage.getItem(SETTINGS_KEY);
         return settings ? JSON.parse(settings) : { ...DEFAULT_SETTINGS };
     }
-    return settingsCache || { ...DEFAULT_SETTINGS };
+    const settings = settingsCache || { ...DEFAULT_SETTINGS };
+    // Ensure targetWeight exists
+    if (!settings.targetWeight) settings.targetWeight = 89.9;
+    return settings;
 }
 
 function saveSettingsData(settings) {
