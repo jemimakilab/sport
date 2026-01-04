@@ -1,0 +1,8 @@
+{
+  "tag_name": "v1.1.0",
+  "target_commitish": "master",
+  "name": "v1.1.0 - Adjustable Target Weight",
+  "body": "## What's New\\n\\n### ✨ Features\\n- **Adjustable Target Weight**: You can now set your own target weight in Settings (60-120 kg range)\\n- **Dynamic Quarter Goals**: Quarter goals automatically recalculate based on your target weight\\n- **Live Updates**: All progress bars and displays update immediately when you change the target\\n\\n### 🔧 Improvements\\n- Added auto-updater functionality for future releases\\n- Version bumped to 1.1.0\\n\\n### 📝 Notes\\nThis release includes the auto-updater. Future updates will install automatically!",
+  "draft": false,
+  "prerelease": false
+}

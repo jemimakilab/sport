@@ -33,12 +33,16 @@ const store = new Store({
 let mainWindow;
 
 function createWindow() {
+    // Get app version from package.json
+    const appVersion = app.getVersion();
+    
     // Create the browser window
     mainWindow = new BrowserWindow({
         width: 450,
         height: 800,
         minWidth: 380,
         minHeight: 600,
+        title: `Playbook 2026 - v${appVersion}`,
         icon: path.join(__dirname, 'icon.png'),
         webPreferences: {
             nodeIntegration: false,
