@@ -106,6 +106,11 @@ async function initStorage() {
     if (!settingsCache) {
         settingsCache = { ...DEFAULT_SETTINGS };
     }
+    
+    // Ensure targetWeight exists in settings
+    if (!settingsCache.targetWeight) {
+        settingsCache.targetWeight = GOAL_WEIGHT;
+    }
 
     storageReady = true;
     return true;

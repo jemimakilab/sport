@@ -121,10 +121,17 @@ function getDynamicProteinGoal() {
 
 function initSettings() {
     const settings = getUserSettings();
+    console.log('Loading settings:', settings); // Debug
 
     // Target Weight slider
     const targetSlider = document.getElementById('settingTargetWeight');
     const targetValue = document.getElementById('targetWeightValue');
+    
+    if (!targetSlider || !targetValue) {
+        console.error('Target weight elements not found!');
+        return;
+    }
+    
     targetSlider.value = settings.targetWeight || 89.9;
     targetValue.textContent = `${settings.targetWeight || 89.9} kg`;
 
@@ -136,6 +143,7 @@ function initSettings() {
         saveUserSettings(newSettings);
         updateQuarterGoals(); // Update quarter goals when target changes
         updateProgressBar(); // Update progress when target changes
+        UI.updateDashboard(); // Force complete dashboard update
     });
 
     // Height slider

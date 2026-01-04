@@ -20,10 +20,16 @@ const UI = {
             document.getElementById('weightToGo').textContent = toGo;
             document.getElementById('progressFill').style.width = `${Math.min(100, Math.max(0, progress))}%`;
             
-            // Update goal display in header
+            // Update goal displays
             const goalElement = document.querySelector('.subtitle');
             if (goalElement && goalElement.textContent.includes('Ziel:')) {
                 goalElement.textContent = `Ziel: ${targetWeight} kg bis 23. Dezember 2026`;
+            }
+            
+            // Update goal in progress card
+            const goalDisplay = document.getElementById('goalDisplay');
+            if (goalDisplay) {
+                goalDisplay.textContent = `Ziel: ${targetWeight} kg`;
             }
         }
 
@@ -295,13 +301,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Weight form submission
     document.getElementById('weightForm').addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('Weight form submitted'); // Debug
 
         const dateStr = document.getElementById('weightDate').value;
         const weight = parseFloat(document.getElementById('weightValue').value);
+        
+        console.log('Date:', dateStr, 'Weight:', weight); // Debug
 
-        if (!dateStr || !weight) return;
+        if (!dateStr || !weight) {
+            console.error('Missing date or weight');
+            return;
+        }
 
         const data = Storage.getData();
+        console.log('Current data:', data); // Debug
 
         if (!data.entries[dateStr]) {
             data.entries[dateStr] = {};
@@ -309,6 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.entries[dateStr].weight = weight;
 
         Storage.saveData(data);
+        console.log('Data saved'); // Debug
 
         // Update displays
         UI.updateDashboard();
